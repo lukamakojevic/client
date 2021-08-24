@@ -1,0 +1,13 @@
+html, body {
+    height: 100%;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+#footer {
+    background-color: #545f68;
+    color: azure;
+    font-size: 20px;
+    text-align: center;
+    padding: 10px;
+}
