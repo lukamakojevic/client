@@ -1,0 +1,127 @@
+<div fxLayoutAlign="center center" style="text-align: center;"> 
+    <mat-horizontal-stepper style="width: 60%;" class="mat-elevation-z6">
+        <mat-step label="Vrsta ugostitelja">
+            <div>
+                <b style="font-size: 18px;">Izaberite vrstu ugostitelja</b> <br><br>
+                <mat-form-field >
+                    <mat-label>Vrsta ugostitelja</mat-label>
+                    <mat-select name="kind" [(ngModel)]="newCaterer.kind" required>
+                        <mat-option *ngFor="let tip of vrsteKorisnika" [value]="tip.value">
+                        {{tip.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <br>
+            <button mat-stroked-button color="primary" *ngIf="newCaterer.kind!=null"matStepperNext>Sledeći korak</button> 
+            <button mat-stroked-button color="primary" matStepperNext *ngIf="newCaterer.kind==null" disabled>Sledeći korak</button>
+        </mat-step>
+        <mat-step label="Identifikacija">
+            <div>
+                <span> 
+                    <b style="font-size: 18px;">Unesite korisničko ime</b> <br><br>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Korisničko ime</mat-label>
+                        <input matInput name="username" [(ngModel)]="newCaterer.username" required>
+                    </mat-form-field>                    
+                  </span>
+                  <br><br>
+                  <span> 
+                    <b style="font-size: 18px;">Unesite šifru</b> <br><br>
+                    <mat-form-field class="example-full-width" >
+                        <mat-label>Šifra</mat-label>
+                        <input matInput type="password" name="password" [(ngModel)]="newCaterer.password" required>
+                    </mat-form-field>                    
+                  </span> 
+            </div>
+            <br>             
+            <button mat-stroked-button color="primary" matStepperPrevious>Prethodni korak</button>  
+            <button mat-stroked-button color="primary" *ngIf="newCaterer.username != null 
+                                                            && newCaterer.password != null
+                                                            && newCaterer.username != '' 
+                                                            && newCaterer.password != ''" matStepperNext> Sledeći korak</button> 
+            <button mat-stroked-button color="primary" matStepperNext *ngIf="newCaterer.username== null 
+                                                                            || newCaterer.username== ''
+                                                                            || newCaterer.password== null
+                                                                            || newCaterer.password== ''" disabled>Sledeći korak</button>
+        </mat-step>
+        <mat-step label="Detalji">
+            <div>
+                <span> 
+                    <b style="font-size: 18px;">Unesite naziv ugostitelja</b> <br><br>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Naziv ugostitelja</mat-label>
+                        <input matInput name="name" [(ngModel)]="newCaterer.name" required>
+                    </mat-form-field>                    
+                </span>
+                <br><br>
+                <span> 
+                    <b style="font-size: 18px;">Registrovan kod nadležnog organa?</b> <br><br>
+                    <mat-form-field>
+                        <mat-label>Registrovan</mat-label>
+                        <mat-select name="reg" [(ngModel)]="newCaterer.registeredFlag" required>
+                          <mat-option *ngFor="let reg of tipoviRegistracije" [value]="reg.value">
+                            {{reg.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>                    
+                </span>
+                <br><br>
+                <span> 
+                    <b style="font-size: 18px;">Unesite opis ugostitelja</b> <br><br>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Opis ugostitelja</mat-label>
+                        <textarea matInput name="details" [(ngModel)]="newCaterer.details"></textarea>
+                    </mat-form-field>                    
+                </span>
+            </div>
+            <br>             
+            <button mat-stroked-button color="primary" matStepperPrevious>Prethodni korak</button>  
+            <button mat-stroked-button color="primary" *ngIf="newCaterer.name != null 
+                                                            && newCaterer.registeredFlag != null
+                                                            && newCaterer.name != ''"matStepperNext>Sledeći korak</button> 
+            <button mat-stroked-button color="primary" matStepperNext *ngIf="newCaterer.name == null 
+                                                                    || newCaterer.registeredFlag == null
+                                                                    || newCaterer.name == ''" disabled>Sledeći korak</button> 
+        </mat-step>
+        <mat-step label="Pregled">
+            <div fxLayout="column" fxLayoutAlign="start center" >
+                <table>
+                    <tr>
+                        <th>Tip ugostitelja</th>
+                        <td *ngIf="newCaterer.kind == 1"> Pravno lice </td>
+                        <td *ngIf="newCaterer.kind == 2"> Preduzetnik </td>
+                        <td *ngIf="newCaterer.kind == 3"> Fizičko lice </td>
+                        <td *ngIf="newCaterer.kind == 4"> Ustanova </td>
+                    </tr>
+                    <tr>
+                        <th>Korisničko ime</th>
+                        <td>{{newCaterer.username}}</td>
+                    </tr>
+                    <tr>
+                        <th>Šifra</th>
+                        <td>{{newCaterer.password}}</td>
+                    </tr>
+                    <tr>
+                        <th>Naziv ugostitelja</th>
+                        <td>{{newCaterer.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Registrovan</th>
+                        <td *ngIf="newCaterer.registeredFlag"> Da </td>
+                        <td *ngIf="!newCaterer.registeredFlag"> Ne </td>
+                    </tr>
+                    <tr>
+                        <th>Opis</th>
+                        <td>{{newCaterer.details}}</td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <button mat-stroked-button color="primary" matStepperPrevious>Prethodni korak</button> 
+            <button mat-stroked-button color="primary" (click)="addNewCaterer()">Dodaj ugostitelja</button>  
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>
+
+  

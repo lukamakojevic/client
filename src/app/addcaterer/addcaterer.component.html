@@ -1,0 +1,103 @@
+<div fxLayoutAlign="center center" style="text-align: center;"> 
+    <mat-horizontal-stepper style="width: 60%;" class="mat-elevation-z6">
+        <mat-step label="Vrsta objekta">
+            <div>
+                <b style="font-size: 18px;">Izaberite vrstu objekta</b> <br><br>
+                <mat-form-field >
+                    <mat-label>Vrsta objekta</mat-label>
+                    <mat-select name="type" [(ngModel)]="newObject.type" required>
+                        <mat-option *ngFor="let tip of vrsteObjekata" [value]="tip.value">
+                        {{tip.viewValue}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <br>
+            <button mat-stroked-button color="primary" *ngIf="newObject.type!=null"matStepperNext>Sledeći korak</button> 
+            <button mat-stroked-button color="primary" matStepperNext *ngIf="newObject.type==null" disabled>Sledeći korak</button>
+        </mat-step>
+        
+        <mat-step label="Detalji">
+            <div>
+                <span> 
+                    <b style="font-size: 18px;">Unesite naziv objekta</b> <br><br>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Naziv objekta</mat-label>
+                        <input matInput name="name" [(ngModel)]="newObject.name" required>
+                    </mat-form-field>                    
+                </span>
+                <br><br>
+                <span> 
+                    <b style="font-size: 18px;">Unesite detalje o objektu</b> <br><br>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Opis ugostitelja</mat-label>
+                        <textarea matInput name="details" [(ngModel)]="newObject.details"></textarea>
+                    </mat-form-field>                    
+                </span>
+            </div>
+            <br>             
+            <button mat-stroked-button color="primary" matStepperPrevious>Prethodni korak</button>  
+            <button mat-stroked-button color="primary" *ngIf="newObject.name != null 
+                                                            && newObject.name != ''"matStepperNext>Sledeći korak</button> 
+            <button mat-stroked-button color="primary" matStepperNext *ngIf="newObject.name == null 
+                                                                    || newObject.name == ''" disabled>Sledeći korak</button> 
+        </mat-step>
+        <mat-step label="Kategorizacija">
+            <div>
+                <b style="font-size: 18px;">Da li želite da podnesete zahtev za kategorizaciju?</b>                                   
+                <mat-checkbox name="ckeck" style="padding-left: 10px;" [(ngModel)]="wantCat"> Da </mat-checkbox>
+                <br><br>
+                <span *ngIf="wantCat">                   
+                    <span> 
+                        <mat-form-field class="example-full-width">
+                            <mat-label style="font-size: 16px;">Broj zvezdica</mat-label>
+                            <mat-select name="stars" [(ngModel)]="newRequest.stars" required>
+                                <mat-option value="1" style="font-size: 18px;">
+                                    ☆
+                                </mat-option>
+                                <mat-option value="2" style="font-size: 16px;">
+                                    ☆☆
+                                </mat-option>
+                                <mat-option value="3" style="font-size: 16px;">
+                                    ☆☆☆
+                                </mat-option>
+                                <mat-option value="4" style="font-size: 16px;">
+                                    ☆☆☆☆
+                                </mat-option>
+                                <mat-option value="5" style="font-size: 16px;">
+                                    ☆☆☆☆☆
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>                    
+                    </span>
+                    <br><br>
+                    <span> 
+                        <mat-form-field class="example-full-width">
+                            <mat-label style="font-size: 22px;">Datum od</mat-label>
+                            <input matInput type="date" name="od" [(ngModel)]="newRequest.dateFrom" required>
+                        </mat-form-field>                    
+                    </span>
+                    <br><br>
+                    <span> 
+                        <mat-form-field class="example-full-width">
+                            <mat-label style="font-size: 22px;">Datum do</mat-label>
+                            <input matInput type="date" name="do" [(ngModel)]="newRequest.dateTo" required>
+                        </mat-form-field>                    
+                    </span>
+                </span>
+            </div>
+            <br>             
+            <button mat-stroked-button color="primary" matStepperPrevious>Prethodni korak</button>  
+            <button mat-stroked-button color="primary" *ngIf="!wantCat ||
+                                                                    (newRequest.stars != null &&
+                                                                    newRequest.dateFrom != null &&
+                                                                    newRequest.dateTo != null )"matStepperNext>Sledeći korak</button> 
+            <button mat-stroked-button color="primary" matStepperNext *ngIf="wantCat &&
+                                                                    (newRequest.stars == null ||
+                                                                    newRequest.dateFrom == null ||
+                                                                    newRequest.dateTo == null )" disabled>Sledeći korak</button> 
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>
+
+  

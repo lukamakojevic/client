@@ -12,3 +12,7 @@ th.mat-sort-header-sorted {
 .example-form{
     padding: 3px;
 }
+
+.row:hover{
+    background-color: rgb(240, 240, 240);
+}

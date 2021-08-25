@@ -6,17 +6,17 @@ import { User } from '../models/user';
 import {MatTableDataSource} from '@angular/material/table';
 import { Router } from '@angular/router';
 
-interface Tip {
+export interface Tip {
   value: number;
   viewValue: string;
 }
 
-interface Vrsta {
+export interface Vrsta {
   value: number;
   viewValue: string;
 }
 
-interface TipReg {
+export interface TipReg {
   value: boolean;
   viewValue: string;
 }
@@ -29,7 +29,7 @@ interface TipReg {
 
 export class AdminComponent implements OnInit{
   displayedColumns: string[] = ['name', 'username', 'password' , 'type', 'kind'
-                               , 'registeredFlag','buttonsSave','buttonsCancel'];
+                               , 'registeredFlag' ,'buttonsSave','buttonsCancel' , 'buttonsDelete'];
 
   tipoviKorisnika: Tip[] = [
     {value: 0, viewValue: 'Admin'},
@@ -55,9 +55,11 @@ export class AdminComponent implements OnInit{
   allUsers: User[] | undefined;
   dataSource: MatTableDataSource<User> = new MatTableDataSource();
   editModeUserId: string = "";
-  editModeUser: User = new User;
+  editModeUser: User = new User();
   exitMode: boolean = false;
 
+  newUserMessage: string = "";
+  newUser: User = new User();
   constructor(private router: Router, private adminService: AdminService) { }
 
   ngOnInit(): void {
@@ -99,6 +101,68 @@ export class AdminComponent implements OnInit{
     })
     this.editModeUser = new User;
     this.exitMode = true;
+  }
+
+  addNewUser(){
+
+    if(this.newUser.name == null || this.newUser.name == undefined){
+      this.newUserMessage = "Unesite naziv korisnika."
+      return;
+    }
+
+    if(this.newUser.username == null || this.newUser.username == undefined){
+      this.newUserMessage = "Unesite korisničko ime."
+      return;
+    }
+
+    if(this.newUser.password == null || this.newUser.password == undefined){
+      this.newUserMessage = "Unesite šifru."
+      return;
+    }    
+
+    if(this.newUser.type == null || this.newUser.type == undefined){
+      this.newUserMessage = "Unesite tip korisnika."
+      return;
+    }
+
+    if(this.newUser.kind == null || this.newUser.kind == undefined){
+      this.newUserMessage = "Unesite vrstu korisnika."
+      return;
+    }
+
+    if(this.newUser.registeredFlag == null || this.newUser.registeredFlag == undefined){
+      this.newUser.registeredFlag = false;
+    }
+
+    this.adminService.addNewUser(this.newUser).subscribe((data: any)=>{
+      this.newUserMessage = data;
+      this.adminService.getAllUsers().subscribe((data: any)=>{
+        this.allUsers = data;
+        this.dataSource = new MatTableDataSource(this.allUsers);
+        this.dataSource.sort = this.sort;
+      })
+
+    })
+  }
+
+  cancelNewUser(){
+    this.newUser = new User();
+    this.newUserMessage = "";
+  }
+
+  deleteUser(){
+    if(confirm("Da li ste sigurni da želite da izbrišete korisnika "+ this.editModeUser.username + " ?")) {
+      if(this.editModeUser.type == 0){
+        alert("Nije moguće ukloniti korisnika tipa administrator.");
+      }else{
+        this.adminService.removeUser(this.editModeUser).subscribe((data: any)=>{
+          this.allUsers = data;
+          this.dataSource = new MatTableDataSource(this.allUsers);
+          this.dataSource.sort = this.sort;
+        })
+      }
+      
+    }
   }
 
   logOut(){

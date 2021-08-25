@@ -12,6 +12,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { AdminComponent } from './admin/admin.component';
 import { CatererComponent } from './caterer/caterer.component';
 import { WorkerComponent } from './worker/worker.component';
+import { AddworkerComponent } from './addworker/addworker.component';
+import {MatStepperModule} from '@angular/material/stepper';
+import { AddcatererComponent } from './addcaterer/addcaterer.component';
+
 
 @NgModule({
   declarations: [
@@ -19,7 +23,9 @@ import { WorkerComponent } from './worker/worker.component';
     WelcomeComponent,
     AdminComponent,
     CatererComponent,
-    WorkerComponent
+    WorkerComponent,
+    AddworkerComponent,
+    AddcatererComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +35,8 @@ import { WorkerComponent } from './worker/worker.component';
     BrowserAnimationsModule , 
     FlexLayoutModule ,
     AngularMaterialModule , 
-    HttpClientModule
+    HttpClientModule ,
+    MatStepperModule
   ],
   providers: [],
   bootstrap: [AppComponent], 

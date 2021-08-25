@@ -1,1 +1,83 @@
-<p>caterer works!</p>
+<div>
+    <mat-toolbar color="primary">        
+        <span>Ugostitelj</span>
+
+        <span class="example-spacer"></span>
+
+        <span >          
+            Dodaj objekat 
+            <button mat-icon-button (click)="toggleAddingObject()" *ngIf="addingObject==false">                  
+                <mat-icon>add_circle_outline</mat-icon>          
+            </button>
+            <button mat-icon-button (click)="toggleAddingObject()" *ngIf="addingObject==true">                  
+                <mat-icon>cancel</mat-icon>          
+            </button>
+        </span>
+
+        <span class="example-spacer"></span>
+        
+        <span >
+            Odjavi se 
+            <button mat-icon-button (click)="logOut()">                  
+                <mat-icon>exit_to_app</mat-icon>          
+            </button>
+        </span>
+                
+    </mat-toolbar>
+</div>
+<div style="text-align: center;">
+    <span style="color:red; font-size:18px; text-align: center;" *ngIf="newObjectMessage!=''">{{newObjectMessage}}</span>
+    <span style="color:rgb(0, 0, 0); font-size:18px; text-align: center;" *ngIf="newObjectInfo!=''">{{newObjectInfo}}</span>
+</div>
+<br>
+<app-addcaterer (userAdded)="objectAdded($event)" *ngIf="addingObject==true"></app-addcaterer>
+<br>
+<div>
+    <p style="font-size: 20px; text-align: center; font-weight: bold;">Pregled objekata</p>
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" >
+        <!-- Naziv Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Naziv objekta</th>
+          <td mat-cell *matCellDef="let element">
+            <span> {{element.name}} </span>
+            
+          </td>
+        </ng-container>   
+       
+         <!-- Vrsta Column -->
+         <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Vrsta objekta </th>
+            <td mat-cell *matCellDef="let element" >           
+                <span *ngIf="element.type == 1"> Kafana </span>
+                <span *ngIf="element.type == 2"> Restoran </span>
+                <span *ngIf="element.type == 3"> Bar </span>
+                <span *ngIf="element.type == 4"> Kafić </span>                
+            </td>
+        </ng-container>
+
+        <!-- Opis Column -->
+        <ng-container matColumnDef="details">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>  Opis objekta </th>
+            <td mat-cell *matCellDef="let element">
+              <span > {{element.details}} </span>               
+            </td>
+          </ng-container>
+
+          <!-- Opis Column -->
+        <ng-container matColumnDef="stars">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>  Broj zvezdica </th>
+            <td mat-cell *matCellDef="let element">
+              <span *ngIf="element.stars == 1" style="font-size: 26px;"> ☆ </span>
+              <span *ngIf="element.stars == 2" style="font-size: 26px;"> ☆☆ </span>
+              <span *ngIf="element.stars == 3" style="font-size: 26px;"> ☆☆☆ </span>
+              <span *ngIf="element.stars == 4" style="font-size: 26px;"> ☆☆☆☆ </span>
+              <span *ngIf="element.stars == 5" style="font-size: 26px;"> ☆☆☆☆☆ </span>               
+            </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns;" (click)="edit(row)"></tr>
+    </table>
+</div>
+
+  
