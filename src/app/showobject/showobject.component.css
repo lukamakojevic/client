@@ -1,0 +1,20 @@
+.bar-title{
+    font-size: 22px;
+    font-weight: bold;
+}
+.exit-showing{
+    font-size: 20px;
+    border-radius: 5px;
+    color: white;
+    background-color: rgb(0, 0, 148);
+}
+.exit-showing:hover , .exit-showing:active{    
+    background-color: rgb(0, 28, 189);
+    font-size: 20px;
+}
+
+.action-header{
+    font-weight: bold;
+     font-size: 18px;
+}
+  

@@ -1,4 +1,4 @@
-th {
+.my-th {
     background-color: #04AA6D;
     color: white;
     padding: 10px;
@@ -13,4 +13,8 @@ td{
     text-align: left;
     font-weight: bold;
     font-size: 16px;
+}
+
+::ng-deep .mat-horizontal-stepper-header{
+    pointer-events: none !important;
 }

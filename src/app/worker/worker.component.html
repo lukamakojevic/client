@@ -32,8 +32,13 @@
 <br>
 <app-addworker (userAdded)="catererAdded($event)" *ngIf="addingCaterer==true"></app-addworker>
 <br>
-<div>
-    <p style="font-size: 20px; text-align: center; font-weight: bold;">Pregled ugostitelja</p>
+
+<div div fxLayout="row" fxLayoutAlign="center center" class="menuBar">        
+    <div [class.selected]="showing=='ugostitelji'"class="menuOption" (click)="navigate('ugostitelji')">Ugostitelji</div>
+    <div [class.selected]="showing=='zahtevi'"class="menuOption" (click)="navigate('zahtevi')">Zahtevi za kategorizaciju</div>        
+</div>
+
+<div *ngIf="showing=='ugostitelji'">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" >
         <!-- Naziv Column -->
         <ng-container matColumnDef="name">
@@ -103,7 +108,7 @@
                   <form class="example-form">
                       <mat-form-field class="example-full-width">
                         <mat-label>Opis</mat-label>
-                        <input matInput name="details" [(ngModel)]="editModeUser.details">
+                        <textarea matInput name="details" [(ngModel)]="editModeUser.details"></textarea>
                       </mat-form-field>
                   </form>
               </span> 
@@ -142,6 +147,79 @@
       
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns;" (click)="edit(row)"></tr>
+    </table>
+</div>
+
+<div *ngIf="showing=='zahtevi'">
+    <table mat-table [dataSource]="dataSource2" matSort class="mat-elevation-z8" >
+        <!-- Id Column -->
+        <ng-container matColumnDef="objectId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Naziv objekta</th>
+          <td mat-cell *matCellDef="let element">
+            <span > {{element.object.name}} </span>             
+          </td>
+        </ng-container>   
+       
+         <!-- Datum Column -->
+         <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Datum podnošenja </th>
+            <td mat-cell *matCellDef="let element">
+                <span > {{element.date}} </span>             
+              </td>
+        </ng-container>
+
+        <!-- Zvezdice Column -->
+        <ng-container matColumnDef="stars">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Zvezdice </th>
+            <td mat-cell *matCellDef="let element" style="color: rgb(255, 153, 0); font-size: 26px;">
+                <span *ngIf="element.stars == 1" > ☆ </span>
+                <span *ngIf="element.stars == 2" > ☆☆ </span>
+                <span *ngIf="element.stars == 3" > ☆☆☆ </span>
+                <span *ngIf="element.stars == 4" > ☆☆☆☆ </span>
+                <span *ngIf="element.stars == 5" > ☆☆☆☆☆ </span>              
+            </td>
+        </ng-container>
+         <!-- DatumOd Column -->
+         <ng-container matColumnDef="dateFrom">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Datum od </th>
+            <td mat-cell *matCellDef="let element">
+                <span > {{element.dateFrom}} </span>             
+              </td>
+        </ng-container>
+         <!-- DatumDo Column -->
+         <ng-container matColumnDef="dateTo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Datum do </th>
+            <td mat-cell *matCellDef="let element">
+                <span > {{element.dateTo}} </span>             
+              </td>
+        </ng-container>
+
+        <!-- Prihvati Column -->
+        <ng-container matColumnDef="buttonsAccept">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
+            <td mat-cell *matCellDef="let element"> 
+                <span> 
+                    <form>                    
+                        <button mat-stroked-button color="primary" (click)="accept(element)">Prihvati</button>
+                    </form>
+                </span>
+            </td>
+        </ng-container>
+    
+        <!-- Odbij Column -->
+        <ng-container matColumnDef="buttonsDecline">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
+            <td mat-cell *matCellDef="let element">             
+                <span> 
+                    <form>
+                        <button mat-stroked-button color="warn" (click)="decline(element)">Odbij</button>
+                    </form>                
+                </span>
+            </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+        <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
     </table>
 </div>
 

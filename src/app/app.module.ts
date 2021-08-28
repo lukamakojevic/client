@@ -15,6 +15,8 @@ import { WorkerComponent } from './worker/worker.component';
 import { AddworkerComponent } from './addworker/addworker.component';
 import {MatStepperModule} from '@angular/material/stepper';
 import { AddcatererComponent } from './addcaterer/addcaterer.component';
+import { ShowobjectComponent } from './showobject/showobject.component';
+import { NgImageSliderModule } from 'ng-image-slider';
 
 
 @NgModule({
@@ -25,7 +27,8 @@ import { AddcatererComponent } from './addcaterer/addcaterer.component';
     CatererComponent,
     WorkerComponent,
     AddworkerComponent,
-    AddcatererComponent
+    AddcatererComponent,
+    ShowobjectComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +39,8 @@ import { AddcatererComponent } from './addcaterer/addcaterer.component';
     FlexLayoutModule ,
     AngularMaterialModule , 
     HttpClientModule ,
-    MatStepperModule
+    MatStepperModule , 
+    NgImageSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent], 

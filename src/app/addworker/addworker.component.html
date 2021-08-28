@@ -77,12 +77,9 @@
             </div>
             <br>             
             <button mat-stroked-button color="primary" matStepperPrevious>Prethodni korak</button>  
-            <button mat-stroked-button color="primary" *ngIf="newCaterer.name != null 
-                                                            && newCaterer.registeredFlag != null
-                                                            && newCaterer.name != ''"matStepperNext>Sledeći korak</button> 
-            <button mat-stroked-button color="primary" matStepperNext *ngIf="newCaterer.name == null 
-                                                                    || newCaterer.registeredFlag == null
-                                                                    || newCaterer.name == ''" disabled>Sledeći korak</button> 
+            <button mat-stroked-button color="primary" 
+                [disabled]="isBlank(newCaterer.name) || newCaterer.registeredFlag==null"matStepperNext>Sledeći korak</button> 
+            
         </mat-step>
         <mat-step label="Pregled">
             <div fxLayout="column" fxLayoutAlign="start center" >

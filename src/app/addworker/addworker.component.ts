@@ -56,5 +56,9 @@ export class AddworkerComponent implements OnInit {
     });
   }
 
+  isBlank(str: string) {
+    return (!str || /^\s*$/.test(str));
+  }
+  
 }
 

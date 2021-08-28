@@ -6,6 +6,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import { Router } from '@angular/router';
 import { WorkerService } from '../worker.service';
 import { Tip, TipReg, Vrsta } from '../admin/admin.component';
+import { MyRequest } from '../models/request';
 
 @Component({
   selector: 'app-worker',
@@ -14,8 +15,9 @@ import { Tip, TipReg, Vrsta } from '../admin/admin.component';
 })
 
 export class WorkerComponent implements OnInit{
-  displayedColumns: string[] = ['name',  'kind'
-                               , 'details','registeredFlag', 'buttonsSave','buttonsCancel'];
+  displayedColumns: string[] = ['name', 'kind','details','registeredFlag', 'buttonsSave','buttonsCancel'];
+
+  displayedColumns2: string[] = ['objectId','date', 'stars','dateFrom', 'dateTo','buttonsAccept' , 'buttonsDecline'];
 
   tipoviKorisnika: Tip[] = [
     {value: 0, viewValue: 'Admin'},
@@ -38,9 +40,15 @@ export class WorkerComponent implements OnInit{
 
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
-  loggedUser: User | undefined;
-  allCaterers: User[] | undefined;
+  loggedUser: User = new User();
+  showing: string = "ugostitelji";
+
+  allCaterers: User[] = [];
   dataSource: MatTableDataSource<User> = new MatTableDataSource();
+
+  allRequests: MyRequest[] = [];
+  dataSource2: MatTableDataSource<MyRequest> = new MatTableDataSource();
+
   editModeUserId: string = "";
   editModeUser: User = new User;
   exitMode: boolean = false;
@@ -60,7 +68,32 @@ export class WorkerComponent implements OnInit{
       this.dataSource = new MatTableDataSource(this.allCaterers);
       this.dataSource.sort = this.sort;
     })
+
+    this.getAllRequestsWrapper();
   }  
+
+  getAllRequestsWrapper(){
+    this.workerService.getAllRequests().subscribe((data: any)=>{
+      this.allRequests = data;
+      let  allRequestsCopy: any[] = [];
+      this.allRequests.forEach(val => allRequestsCopy.push(Object.assign({}, val)));
+
+      allRequestsCopy.forEach(element => {
+        element.date = element.date.replace(/T.*/,'').split('-').reverse().join('.');
+        element.dateFrom = element.dateFrom.replace(/T.*/,'').split('-').reverse().join('.');
+        element.dateTo = element.dateTo.replace(/T.*/,'').split('-').reverse().join('.');
+      });
+            
+      this.dataSource2 = new MatTableDataSource(allRequestsCopy);
+      this.dataSource2.sort = this.sort;
+    })
+  }
+
+  navigate(nav: string){
+    this.newCatererInfo ="";
+    this.newCatererMessage ="";
+    this.showing = nav;
+  }
 
   edit(row : any){ 
     this.newCatererInfo ="";
@@ -125,6 +158,24 @@ export class WorkerComponent implements OnInit{
       this.newCatererInfo ="";
 
     }
+  }
+
+  accept(element:any){  
+
+    if(confirm("Da li ste sigurni da želite da prihvatite ovaj zahtev? ")){
+      this.workerService.acceptRequest(element , this.loggedUser._id).subscribe((data: any)=>{
+        this.getAllRequestsWrapper();
+      });
+    }  
+
+  }
+
+  decline(element:any){
+    if(confirm("Da li ste sigurni da želite da odbijete ovaj zahtev? ")){
+      this.workerService.declineRequest(element , this.loggedUser._id).subscribe((data: any)=>{
+        this.getAllRequestsWrapper();
+      });
+    } 
   }
 
   logOut(){

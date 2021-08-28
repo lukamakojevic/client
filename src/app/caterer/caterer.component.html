@@ -30,9 +30,9 @@
     <span style="color:rgb(0, 0, 0); font-size:18px; text-align: center;" *ngIf="newObjectInfo!=''">{{newObjectInfo}}</span>
 </div>
 <br>
-<app-addcaterer (userAdded)="objectAdded($event)" *ngIf="addingObject==true"></app-addcaterer>
+<app-addcaterer (objectAdded)="objectAdded($event)" *ngIf="addingObject==true"></app-addcaterer>
 <br>
-<div>
+<div *ngIf="showing=='allObjects'">
     <p style="font-size: 20px; text-align: center; font-weight: bold;">Pregled objekata</p>
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" >
         <!-- Naziv Column -->
@@ -66,18 +66,35 @@
           <!-- Opis Column -->
         <ng-container matColumnDef="stars">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>  Broj zvezdica </th>
-            <td mat-cell *matCellDef="let element">
-              <span *ngIf="element.stars == 1" style="font-size: 26px;"> ☆ </span>
-              <span *ngIf="element.stars == 2" style="font-size: 26px;"> ☆☆ </span>
-              <span *ngIf="element.stars == 3" style="font-size: 26px;"> ☆☆☆ </span>
-              <span *ngIf="element.stars == 4" style="font-size: 26px;"> ☆☆☆☆ </span>
-              <span *ngIf="element.stars == 5" style="font-size: 26px;"> ☆☆☆☆☆ </span>               
+            <td mat-cell *matCellDef="let element" style="color: rgb(255, 153, 0); font-size: 26px;">
+              <span *ngIf="element.stars == 1" > ☆ </span>
+              <span *ngIf="element.stars == 2" > ☆☆ </span>
+              <span *ngIf="element.stars == 3" > ☆☆☆ </span>
+              <span *ngIf="element.stars == 4" > ☆☆☆☆ </span>
+              <span *ngIf="element.stars == 5" > ☆☆☆☆☆ </span>               
             </td>
         </ng-container>
+
+        <!-- Prikazi Column -->
+      <ng-container matColumnDef="viewButtons">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
+        <td mat-cell *matCellDef="let element">  
+            <span> 
+                <form>                    
+                    <button mat-icon-button class="example-icon delete-icon" (click)="view(element)">                  
+                        <mat-icon>edit</mat-icon>          
+                    </button>
+                </form>
+            </span>                 
+        </td>
+      </ng-container>
       
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns;" (click)="edit(row)"></tr>
+        <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
     </table>
 </div>
+<app-showobject *ngIf="showing=='singleObject'" 
+                [myObject]="showingObject" 
+                (exitShowingEmitter)="exitView($event)"></app-showobject>
 
   

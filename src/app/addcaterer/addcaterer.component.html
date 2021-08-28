@@ -37,34 +37,31 @@
             </div>
             <br>             
             <button mat-stroked-button color="primary" matStepperPrevious>Prethodni korak</button>  
-            <button mat-stroked-button color="primary" *ngIf="newObject.name != null 
-                                                            && newObject.name != ''"matStepperNext>Sledeći korak</button> 
-            <button mat-stroked-button color="primary" matStepperNext *ngIf="newObject.name == null 
-                                                                    || newObject.name == ''" disabled>Sledeći korak</button> 
+            <button mat-stroked-button color="primary" [disabled]="isBlank(newObject.name)" matStepperNext>Sledeći korak</button> 
         </mat-step>
         <mat-step label="Kategorizacija">
             <div>
                 <b style="font-size: 18px;">Da li želite da podnesete zahtev za kategorizaciju?</b>                                   
-                <mat-checkbox name="ckeck" style="padding-left: 10px;" [(ngModel)]="wantCat"> Da </mat-checkbox>
+                <mat-checkbox name="check" style="padding-left: 10px;" [(ngModel)]="wantCat"> Da </mat-checkbox>
                 <br><br>
                 <span *ngIf="wantCat">                   
                     <span> 
                         <mat-form-field class="example-full-width">
                             <mat-label style="font-size: 16px;">Broj zvezdica</mat-label>
                             <mat-select name="stars" [(ngModel)]="newRequest.stars" required>
-                                <mat-option value="1" style="font-size: 18px;">
+                                <mat-option value="1" style="font-size: 18px; color: rgb(255, 153, 0);">
                                     ☆
                                 </mat-option>
-                                <mat-option value="2" style="font-size: 16px;">
+                                <mat-option value="2" style="font-size: 16px; color: rgb(255, 153, 0);">
                                     ☆☆
                                 </mat-option>
-                                <mat-option value="3" style="font-size: 16px;">
+                                <mat-option value="3" style="font-size: 16px; color: rgb(255, 153, 0);">
                                     ☆☆☆
                                 </mat-option>
-                                <mat-option value="4" style="font-size: 16px;">
+                                <mat-option value="4" style="font-size: 16px; color: rgb(255, 153, 0);">
                                     ☆☆☆☆
                                 </mat-option>
-                                <mat-option value="5" style="font-size: 16px;">
+                                <mat-option value="5" style="font-size: 16px; color: rgb(255, 153, 0);">
                                     ☆☆☆☆☆
                                 </mat-option>
                             </mat-select>
@@ -96,6 +93,64 @@
                                                                     (newRequest.stars == null ||
                                                                     newRequest.dateFrom == null ||
                                                                     newRequest.dateTo == null )" disabled>Sledeći korak</button> 
+        </mat-step>
+
+        <mat-step label="Pregled">
+            <div fxLayout="column" fxLayoutAlign="center center" >
+                <table>
+                    <tr>
+                        <th colspan="2"> Pregled novog objekta </th>
+                    </tr>
+                    <tr>
+                        <td class="my-th">Tip objekta</td>
+                        <td *ngIf="newObject.type == 1"> Kafana </td>
+                        <td *ngIf="newObject.type == 2"> Restoran </td>
+                        <td *ngIf="newObject.type == 3"> Bar </td>
+                        <td *ngIf="newObject.type == 4"> Kafić </td>
+                    </tr>
+                    <tr>
+                        <td class="my-th">Naziv objekta</td>
+                        <td>{{newObject.name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="my-th">Opis</td>
+                        <td>{{newObject.details}}</td>
+                    </tr>
+                    <tr>
+                        <td class="my-th">Naziv ugostitelja</td>
+                        <td>{{loggedUser.name}}</td>
+                    </tr>                    
+                    <tr>
+                        <td class="my-th">Želi kategorizaciju?</td>
+                        <td *ngIf="wantCat"> Da </td>
+                        <td *ngIf="!wantCat"> Ne </td>
+                    </tr>
+                    <tr *ngIf="wantCat">
+                        <td colspan="2" style="text-align: center;">Zahtev za kategorizaciju</td>
+                    </tr>
+                    <tr *ngIf="wantCat">
+                        <td class="my-th">Broj zvezdica</td>
+                        <td style="color: rgb(255, 153, 0); font-size: 26px;">
+                            <span *ngIf="newRequest.stars == 1" > ☆ </span>
+                            <span *ngIf="newRequest.stars == 2" > ☆☆ </span>
+                            <span *ngIf="newRequest.stars == 3" > ☆☆☆ </span>
+                            <span *ngIf="newRequest.stars == 4" > ☆☆☆☆ </span>
+                            <span *ngIf="newRequest.stars == 5" > ☆☆☆☆☆ </span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="wantCat">
+                        <td class="my-th">Datum od</td>
+                        <td>{{newRequest.dateFrom}}</td>
+                    </tr>
+                    <tr *ngIf="wantCat">
+                        <td class="my-th">Datum do</td>
+                        <td>{{newRequest.dateTo}}</td>
+                    </tr>                     
+                </table>
+            </div>
+            <br>
+            <button mat-stroked-button color="primary" matStepperPrevious>Prethodni korak</button> 
+            <button mat-stroked-button color="primary" (click)="addNewObject()">Dodaj objekat</button>  
         </mat-step>
     </mat-horizontal-stepper>
 </div>

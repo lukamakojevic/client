@@ -1,0 +1,127 @@
+<div class="mat-elevation-z8">
+    <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 3px;">              
+            <span class="bar-title">  
+                {{myObject.name}}
+            </span>
+            <span style="color: rgb(255, 153, 0); font-size: 30px;">  
+                <span *ngIf="myObject.stars == 1" > ☆ </span>
+                <span *ngIf="myObject.stars == 2" > ☆☆ </span>
+                <span *ngIf="myObject.stars == 3" > ☆☆☆ </span>
+                <span *ngIf="myObject.stars == 4" > ☆☆☆☆ </span>
+                <span *ngIf="myObject.stars == 5" > ☆☆☆☆☆ </span>
+            </span>
+            <span class="exit-showing" (click)="exitShowingObject()">        
+                <button mat-icon-button>      
+                    <mat-icon>arrow_back</mat-icon>                            
+                </button>
+            </span>
+    </div>
+
+    <ng-image-slider [images]="imageObjects" #slider></ng-image-slider>
+
+    <div fxLayout="row" fxLayoutAlign="space-evenly center" style="padding: 10px;">        
+        
+        <div fxLayout="column" fxLayoutAlign="space-evenly center">
+            <p class="action-header" >Izmeni naziv</p>
+            <span style="color:red; font-size:16px; text-align: center;" >{{nameError}}</span>
+            <span style="color:black; font-size:16px; text-align: center;">{{nameInfo}}</span>
+            <br>
+            <mat-form-field class="example-full-width">
+                <mat-label>Naziv objekta</mat-label>
+                <input matInput name="name" [(ngModel)]="myObject.name" required>
+            </mat-form-field>
+            <button mat-stroked-button color="primary" (click)="updateObjectName()" [disabled]="isBlank(myObject.name)">
+                Sačuvaj naziv
+            </button>     
+            <br>
+            <p class="action-header" >Izmeni opis</p>
+            <span style="color:red; font-size:16px; text-align: center;" >{{detailsError}}</span>
+            <span style="color:black; font-size:16px; text-align: center;">{{detailsInfo}}</span>
+            <br>
+            <mat-form-field class="example-full-width">
+                <mat-label>Opis objekta</mat-label>
+                <textarea matInput name="details" placeholder="Unesite opis objekta">{{myObject.details}}</textarea>
+            </mat-form-field>
+            <button mat-stroked-button color="primary" (click)="updateObjectDetails()">Sačuvaj opis</button>
+        </div>   
+
+        <div fxLayout="column" fxLayoutAlign="space-evenly center">    
+            <p class="action-header" >Podnesi zahtev za kategorizaciju</p>    
+            <span style="color:red; font-size:16px; text-align: center;" >{{requestError}}</span>
+            <span style="color:black; font-size:16px; text-align: center;">{{requestInfo}}</span>
+            <br>           
+            <span> 
+                <mat-form-field class="example-full-width">
+                    <mat-label style="font-size: 16px;">Broj zvezdica</mat-label>
+                    <mat-select name="stars" [(ngModel)]="newRequest.stars" required>
+                        <mat-option value="1" style="font-size: 16px; color: rgb(255, 153, 0);">
+                            ☆
+                        </mat-option>
+                        <mat-option value="2" style="font-size: 16px; color: rgb(255, 153, 0);">
+                            ☆☆
+                        </mat-option>
+                        <mat-option value="3" style="font-size: 16px; color: rgb(255, 153, 0);">
+                            ☆☆☆
+                        </mat-option>
+                        <mat-option value="4" style="font-size: 16px; color: rgb(255, 153, 0);">
+                            ☆☆☆☆
+                        </mat-option>
+                        <mat-option value="5" style="font-size: 16px; color: rgb(255, 153, 0);">
+                            ☆☆☆☆☆
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>                    
+            </span>
+            <br>
+            <span> 
+                <mat-form-field class="example-full-width">
+                    <mat-label style="font-size: 22px;">Datum od</mat-label>
+                    <input matInput type="date" name="od" [(ngModel)]="newRequest.dateFrom" required>
+                </mat-form-field>                    
+            </span>
+            <br>
+            <span> 
+                <mat-form-field class="example-full-width">
+                    <mat-label style="font-size: 22px;">Datum do</mat-label>
+                    <input matInput type="date" name="do" [(ngModel)]="newRequest.dateTo" required>
+                </mat-form-field>                    
+            </span>
+            <button mat-stroked-button color="primary" 
+                    [disabled]="newRequest.stars == null ||
+                    newRequest.dateFrom == null || 
+                    newRequest.dateTo == null"
+                    (click)="addNewRequest()">Podnesi zahtev</button>
+        </div>
+        
+        <div fxLayout="column" fxLayoutAlign="space-evenly center" >
+            <p class="action-header" >Dodaj ovlašćenje</p>
+            <span style="color:rgb(119, 119, 119); font-size:14px; text-align: center;"
+                *ngIf="!isOwner()">Morate biti vlasnik objekta da biste davali ovlašćenja</span>
+            <span style="color:red; font-size:16px; text-align: center;" >{{premissionError}}</span>
+            <span style="color:black; font-size:16px; text-align: center;">{{premissionInfo}}</span>
+            <br>
+            <mat-form-field appearance="fill">
+                <mat-label>Korisničko ime</mat-label>
+                <input type="text"
+                    placeholder="Unesite korisničko ime"
+                    aria-label="Korisničko ime"
+                    matInput
+                    [formControl]="myControl"
+                    [matAutocomplete]="auto"
+                    [(ngModel)]="grantPremissionUsername" required>               
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let username of filteredOptions | async" [value]="username">
+                    {{username}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+            <button mat-stroked-button color="primary" 
+                    [disabled]="!isOwner() || isBlank(grantPremissionUsername)"
+                    (click)="grantPremission()">Ovlasti ugostitelja</button>
+        </div>        
+
+    </div>
+    
+</div>
+
+
