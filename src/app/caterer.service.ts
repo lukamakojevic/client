@@ -62,6 +62,33 @@ export class CatererService {
 
     return this.http.post(`${this.uri}/caterer/grantPremission`, data);
   }
-  
+
+
+  getObjectImages(_id: string) {
+
+    const data = { "objectId" : _id };
+
+    return this.http.post(`${this.uri}/caterer/getObjectImages`, data);
+
+  }
+
+  addNewImage(content : any , objectId : string) {
+
+    const data = { 
+      "objectId": objectId,
+      "content" : content
+     };
+
+    return this.http.post(`${this.uri}/caterer/addNewImage`, data);
+
+  }
+
+  deleteImage(image: any , objectId: string) {
+
+    const data = { "id" : image._id , "objectId" : objectId}
+
+    return this.http.post(`${this.uri}/caterer/deleteImage`, data);
+
+  }  
 
 }

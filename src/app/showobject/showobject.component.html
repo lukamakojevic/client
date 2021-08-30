@@ -1,4 +1,4 @@
-<div class="mat-elevation-z8">
+<div class="mat-elevation-z8" *ngIf="showing!='guests'">
     <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 3px;">              
             <span class="bar-title">  
                 {{myObject.name}}
@@ -15,12 +15,58 @@
                     <mat-icon>arrow_back</mat-icon>                            
                 </button>
             </span>
+    </div>  
+    
+    <div fxLayout="row" fxLayoutAlign="center center"class="mat-elevation-z8" 
+                        style="padding: 5px;"  *ngIf="deleting">        
+       
+        <span>Izaberite fotografiju koju želite da izbrišete</span>
+        <button mat-icon-button (click)="deleteReset()">      
+            <mat-icon>cancel</mat-icon>                            
+        </button>
+
+    </div> 
+
+    <ng-image-slider [images]="imageContent" *ngIf="imageObjects.length != 0" #slider
+                     (imageClick)="deleteImage($event)" [imagePopup]="!deleting"></ng-image-slider>
+
+    <div style="color:black; font-size:18px; text-align: center;"*ngIf="imageObjects.length == 0">
+        <br>Nema fotografija
     </div>
+    <br>
 
-    <ng-image-slider [images]="imageObjects" #slider></ng-image-slider>
+    <div fxLayout="row" fxLayoutAlign="space-around center"class="mat-elevation-z8" style="padding: 5px;">  
+        <button mat-icon-button (click)="showGuests()">      
+            <mat-icon>list</mat-icon>                            
+        </button>       
+        <span>        
+            <span style="font-size: 18px; font-weight: bold; padding-right: 5px;"> {{newImage.name}}</span>
+            <input  id="imageSelect" 
+                    name="imageSelect"
+                    type="file" 
+                    style="display: none;"
+                    accept=".jpg, .jpeg, .png"
+                    (change)="fileAttached($event)" 
+                    #imageSelect>
+            <button mat-icon-button (click)="imageSelect.click()">      
+                <mat-icon>add_photo_alternate</mat-icon>                            
+            </button>                        
+        </span>
+        <mat-form-field class="example-full-width" *ngIf="newImage.name != null" style="padding-right: 5px;">
+            <mat-label>Naslov (Opciono)</mat-label>
+            <input matInput name="title" [(ngModel)]="imageTitle" >
+        </mat-form-field>
+        <button class="addImageButton" (click)="saveImage()" [hidden]="!newImage.name">      
+               Dodaj                            
+        </button>
+        <button mat-icon-button (click)="deleteSet()">      
+            <mat-icon>delete</mat-icon>                            
+        </button>
+              
+    </div>     
 
-    <div fxLayout="row" fxLayoutAlign="space-evenly center" style="padding: 10px;">        
-        
+    <div fxLayout="row" fxLayoutAlign="space-evenly center" style="padding: 10px;">       
+
         <div fxLayout="column" fxLayoutAlign="space-evenly center">
             <p class="action-header" >Izmeni naziv</p>
             <span style="color:red; font-size:16px; text-align: center;" >{{nameError}}</span>
@@ -118,10 +164,11 @@
             <button mat-stroked-button color="primary" 
                     [disabled]="!isOwner() || isBlank(grantPremissionUsername)"
                     (click)="grantPremission()">Ovlasti ugostitelja</button>
-        </div>        
-
+        </div>  
     </div>
     
 </div>
+
+<app-report-guest *ngIf="showing=='guests'"></app-report-guest>
 
 

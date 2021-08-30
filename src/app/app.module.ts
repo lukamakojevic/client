@@ -17,6 +17,7 @@ import {MatStepperModule} from '@angular/material/stepper';
 import { AddcatererComponent } from './addcaterer/addcaterer.component';
 import { ShowobjectComponent } from './showobject/showobject.component';
 import { NgImageSliderModule } from 'ng-image-slider';
+import { ReportGuestComponent } from './report-guest/report-guest.component';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { NgImageSliderModule } from 'ng-image-slider';
     WorkerComponent,
     AddworkerComponent,
     AddcatererComponent,
-    ShowobjectComponent
+    ShowobjectComponent,
+    ReportGuestComponent
   ],
   imports: [
     BrowserModule,

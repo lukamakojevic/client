@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NgImageSliderComponent } from 'ng-image-slider';
@@ -15,8 +15,10 @@ import { User } from '../models/user';
   styleUrls: ['./showobject.component.css']
 })
 export class ShowobjectComponent implements OnInit {
-
+  
   loggedUser: User = new User();
+
+  showing: string = "";
 
   @ViewChild('slider')  slider!: NgImageSliderComponent;
 
@@ -40,90 +42,44 @@ export class ShowobjectComponent implements OnInit {
   premissionError: string = "";
 
 
-  @Input() imageObjects: Array<object> = [{
-        image: 'assets/img1.png',
-        thumbImage: 'assets/img1.png',
-        alt: 'alt of image',
-        title: 'title of image'
-    },
-    {
-      image: 'assets/img2.png',
-      thumbImage: 'assets/img2.png',
-      alt: 'alt of image',
-      title: 'title of image'
-    },
-    {
-      image: 'assets/img3.png',
-      thumbImage: 'assets/img3.png',
-      alt: 'alt of image',
-      title: 'title of image'
-  },
-  {
-    image: 'assets/img1.png',
-    thumbImage: 'assets/img1.png',
-    alt: 'alt of image',
-    title: 'title of image'
-},
-{
-  image: 'assets/img2.png',
-  thumbImage: 'assets/img2.png',
-  alt: 'alt of image',
-  title: 'title of image'
-},
-{
-  image: 'assets/img3.png',
-  thumbImage: 'assets/img3.png',
-  alt: 'alt of image',
-  title: 'title of image'
-},{
-  image: 'assets/img1.png',
-  thumbImage: 'assets/img1.png',
-  alt: 'alt of image',
-  title: 'title of image'
-},
-{
-image: 'assets/img2.png',
-thumbImage: 'assets/img2.png',
-alt: 'alt of image',
-title: 'title of image'
-},
-{
-image: 'assets/img3.png',
-thumbImage: 'assets/img3.png',
-alt: 'alt of image',
-title: 'title of image'
-}/*, {
-      image: '.../iOe/xHHf4nf8AE75h3j1x64ZmZ//Z==', // Support base64 image
-      thumbImage: '.../iOe/xHHf4nf8AE75h3j1x64ZmZ//Z==', // Support base64 image
-      title: 'Image title', //Optional: You can use this key if want to show image with title
-      alt: 'Image alt', //Optional: You can use this key if want to show image with alt
-      order: 1 //Optional: if you pass this key then slider images will be arrange according @input: slideOrderType
-  }*/
- ];
-   myControl: FormControl = new FormControl();
+  imageObjects: Array<object> = [];
+  imageContent: Array<object> = [];
 
-   filteredOptions!: Observable<string[]>;
+  myControl: FormControl = new FormControl();
 
+  filteredOptions!: Observable<string[]>;
+
+  newImage: any = [];
+  imageTitle: string = "";
+
+  deleting: boolean =  false;
  
   constructor(private catererService: CatererService) { }
 
   ngOnInit(): void {
+    
+    this.getObjectImagesWrapper();
 
-      this.loggedUser = JSON.parse(localStorage.getItem('loggedIn')!);
+    this.loggedUser = JSON.parse(localStorage.getItem('loggedIn')!);
 
-      this.catererService.getAllCatererUsernames().subscribe((data:any)=>{
-        
-        this.caterers = data;
+    this.catererService.getAllCatererUsernames().subscribe((data:any)=>{
 
-        data.forEach((element: { username: any; }) => {
-          this.usernames.push(element.username)
-        });
+      const index = data.map((e : any) => {return e.username}).indexOf( this.loggedUser.username, 0);
+      if (index > -1) {
+        data.splice(index, 1);
+      }
+      
+      this.caterers = data;
 
-      this.filteredOptions = this.myControl.valueChanges
-        .pipe(
-          startWith(''),
-          map(value => this._filter(value))
-        );
+      data.forEach((element: { username: any; }) => {
+        this.usernames.push(element.username)
+      });
+
+    this.filteredOptions = this.myControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
          
     })
   }
@@ -133,6 +89,18 @@ title: 'title of image'
     const filterValue = value.toLowerCase();
     return this.usernames.filter(option => option.toLowerCase().includes(filterValue));
 
+  }
+
+  getObjectImagesWrapper(){
+    this.catererService.getObjectImages(this.myObject._id).subscribe((data:any)=>{
+
+      this.imageObjects = data;
+      this.imageContent = [];
+      data.forEach((element: { content: object; }) => {
+        this.imageContent.push(element.content)
+      });
+      
+    });
   }
 
   resetMessages(){
@@ -212,6 +180,72 @@ title: 'title of image'
       this.premissionError = "Korisnik ne postoji."
     }
     
+  }
+
+  fileAttached(event: any){
+    console.log(event)
+    this.newImage = event.target.files[0];
+  }
+
+  saveImage(){
+
+    let  file= <File>this.newImage;
+
+    const reader = new FileReader();
+
+    let imageSrc: any = null;
+
+    let tempThis = this;
+
+    reader.addEventListener("load", function () {
+      imageSrc = reader.result;
+
+      const content = {
+        "image": imageSrc,
+        "thumbImage" : imageSrc, 
+        "title" : tempThis.imageTitle
+      }
+  
+      tempThis.catererService.addNewImage(content , tempThis.myObject._id).subscribe((data)=>{
+        tempThis.newImage = [];
+        tempThis.imageTitle = ""
+        tempThis.getObjectImagesWrapper();
+      });
+      
+    }, false);
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+    
+  }
+
+  deleteImage(event: any){
+
+    if(this.deleting){
+      if(confirm("Da li ste sigurni da želite da izbrišete ovu fotografiju ?")) {
+        this.catererService.deleteImage(this.imageObjects[event] , this.myObject._id).subscribe((data:any)=>{
+          this.imageObjects = data;
+          this.imageContent = [];
+          data.forEach((element: { content: object; }) => {
+            this.imageContent.push(element.content)
+          });
+        });
+      }      
+    }
+    
+  }
+
+  deleteSet(){
+    this.deleting = true;
+  }
+
+  deleteReset(){
+    this.deleting = false;
+  }
+
+  showGuests(){
+    this.showing = "guests";
   }
 
 
