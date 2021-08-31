@@ -1,15 +1,15 @@
 <div>
     <mat-toolbar color="primary">        
-        <span>Ugostitelj</span>
+        <span>Ugostitelj {{loggedUser.name}}</span>
 
         <span class="example-spacer"></span>
 
         <span >          
             Dodaj objekat 
-            <button mat-icon-button (click)="toggleAddingObject()" *ngIf="addingObject==false">                  
+            <button mat-icon-button matTooltip="Dodaj objekat"(click)="toggleAddingObject()" *ngIf="addingObject==false">                  
                 <mat-icon>add_circle_outline</mat-icon>          
             </button>
-            <button mat-icon-button (click)="toggleAddingObject()" *ngIf="addingObject==true">                  
+            <button mat-icon-button matTooltip="Poništi"(click)="toggleAddingObject()" *ngIf="addingObject==true">                  
                 <mat-icon>cancel</mat-icon>          
             </button>
         </span>
@@ -18,7 +18,7 @@
         
         <span >
             Odjavi se 
-            <button mat-icon-button (click)="logOut()">                  
+            <button mat-icon-button matTooltip="Odjava" (click)="logOut()">                  
                 <mat-icon>exit_to_app</mat-icon>          
             </button>
         </span>
@@ -81,7 +81,7 @@
         <td mat-cell *matCellDef="let element">  
             <span> 
                 <form>                    
-                    <button mat-icon-button class="example-icon delete-icon" (click)="view(element)">                  
+                    <button mat-icon-button matTooltip="Izmeni objekat" (click)="view(element)">                  
                         <mat-icon>edit</mat-icon>          
                     </button>
                 </form>
@@ -90,7 +90,7 @@
       </ng-container>
       
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+        <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns;" (click)="view(row)"></tr>
     </table>
 </div>
 <app-showobject *ngIf="showing=='singleObject'" 

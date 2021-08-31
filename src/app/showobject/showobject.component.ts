@@ -220,6 +220,11 @@ export class ShowobjectComponent implements OnInit {
     
   }
 
+  cancelImage(){
+    this.newImage = [];
+    this.imageTitle = "";
+  }
+
   deleteImage(event: any){
 
     if(this.deleting){
@@ -248,6 +253,10 @@ export class ShowobjectComponent implements OnInit {
     this.showing = "guests";
   }
 
+  showObject(){
+    this.showing = "";
+  }
+
 
   isBlank(str: string) {
     return (!str || /^\s*$/.test(str));
@@ -255,6 +264,14 @@ export class ShowobjectComponent implements OnInit {
 
   isOwner(){
     return this.loggedUser._id == this.myObject.owner;
+  }
+
+  deleteObject(){
+    if(confirm("Da li ste sigurni da želite da uklonite ovaj objekat ?")) {
+      this.catererService.deleteObject(this.myObject._id).subscribe((data) => {
+        this.exitShowingEmitter.emit(true);
+      });
+    }
   }
 
 }

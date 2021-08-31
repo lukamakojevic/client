@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-report-guest',
@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReportGuestComponent implements OnInit {
 
+  @Output() exitShowingGuestsEmitter = new EventEmitter<any>();
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  backToObject(){
+    this.exitShowingGuestsEmitter.emit();
   }
 
 }

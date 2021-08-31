@@ -53,6 +53,7 @@ export class AddcatererComponent implements OnInit {
   }
 
   addNewObject(){
+    this.newObject.premissions = [];
     this.newObject.premissions.push(this.loggedUser._id);
     this.newObject.owner = this.loggedUser._id;
     this.newObject.stars = 0;
@@ -75,7 +76,7 @@ export class AddcatererComponent implements OnInit {
         })
 
       }else{
-        this.newObjectAdded(data);
+        this.newObjectAdded(data.message);
         this.newRequest = new MyRequest();
         this.newObject = new MyObject();
       }

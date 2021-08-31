@@ -1,5 +1,5 @@
 export class MyObject{
-    _id : string = "";
+    _id? : string;
     name : string = "";
     type : number | undefined ;    
     owner: string | undefined;

@@ -6,7 +6,7 @@ import { MyRequest } from './models/request';
 @Injectable({
   providedIn: 'root'
 })
-export class CatererService {
+export class CatererService { 
   
   uri = 'http://localhost:4000';
 
@@ -20,7 +20,10 @@ export class CatererService {
 
   }
 
-  addNewObject(newObject: Object) {
+  addNewObject(newObject: MyObject) {
+
+    delete newObject._id;
+
     return this.http.post(`${this.uri}/caterer/addNewObject`, newObject);
 
   }
@@ -55,7 +58,7 @@ export class CatererService {
 
   }
 
-  grantPremission(objectId: string, userId: string) {
+  grantPremission(objectId: any, userId: string) {
 
     const data = { "objectId" : objectId,
                    "userId" : userId}
@@ -64,7 +67,7 @@ export class CatererService {
   }
 
 
-  getObjectImages(_id: string) {
+  getObjectImages(_id: any) {
 
     const data = { "objectId" : _id };
 
@@ -72,7 +75,7 @@ export class CatererService {
 
   }
 
-  addNewImage(content : any , objectId : string) {
+  addNewImage(content : any , objectId : any) {
 
     const data = { 
       "objectId": objectId,
@@ -83,12 +86,19 @@ export class CatererService {
 
   }
 
-  deleteImage(image: any , objectId: string) {
+  deleteImage(image: any , objectId: any) {
 
     const data = { "id" : image._id , "objectId" : objectId}
 
     return this.http.post(`${this.uri}/caterer/deleteImage`, data);
 
   }  
+
+  deleteObject(objectId: any) {
+
+    const data = { "id" : objectId}
+
+    return this.http.post(`${this.uri}/caterer/deleteObject`, data);
+  }
 
 }

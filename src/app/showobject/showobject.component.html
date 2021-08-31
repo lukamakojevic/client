@@ -10,7 +10,7 @@
                 <span *ngIf="myObject.stars == 4" > ☆☆☆☆ </span>
                 <span *ngIf="myObject.stars == 5" > ☆☆☆☆☆ </span>
             </span>
-            <span class="exit-showing" (click)="exitShowingObject()">        
+            <span class="exit-showing" (click)="exitShowingObject()" matTooltip="Nazad">        
                 <button mat-icon-button>      
                     <mat-icon>arrow_back</mat-icon>                            
                 </button>
@@ -21,7 +21,7 @@
                         style="padding: 5px;"  *ngIf="deleting">        
        
         <span>Izaberite fotografiju koju želite da izbrišete</span>
-        <button mat-icon-button (click)="deleteReset()">      
+        <button mat-icon-button (click)="deleteReset()" matTooltip="Izađi">      
             <mat-icon>cancel</mat-icon>                            
         </button>
 
@@ -35,33 +35,50 @@
     </div>
     <br>
 
-    <div fxLayout="row" fxLayoutAlign="space-around center"class="mat-elevation-z8" style="padding: 5px;">  
-        <button mat-icon-button (click)="showGuests()">      
-            <mat-icon>list</mat-icon>                            
-        </button>       
-        <span>        
-            <span style="font-size: 18px; font-weight: bold; padding-right: 5px;"> {{newImage.name}}</span>
-            <input  id="imageSelect" 
-                    name="imageSelect"
-                    type="file" 
-                    style="display: none;"
-                    accept=".jpg, .jpeg, .png"
-                    (change)="fileAttached($event)" 
-                    #imageSelect>
-            <button mat-icon-button (click)="imageSelect.click()">      
-                <mat-icon>add_photo_alternate</mat-icon>                            
-            </button>                        
-        </span>
-        <mat-form-field class="example-full-width" *ngIf="newImage.name != null" style="padding-right: 5px;">
-            <mat-label>Naslov (Opciono)</mat-label>
-            <input matInput name="title" [(ngModel)]="imageTitle" >
-        </mat-form-field>
-        <button class="addImageButton" (click)="saveImage()" [hidden]="!newImage.name">      
-               Dodaj                            
-        </button>
-        <button mat-icon-button (click)="deleteSet()">      
-            <mat-icon>delete</mat-icon>                            
-        </button>
+    <div fxLayout="row" fxLayoutAlign="space-around center"class="mat-elevation-z8" style="padding: 5px;"> 
+        <div>
+            <span class="mySpan" (click)="showGuests()" matTooltip="Prijavi/odjavi gosta">
+                Prijava/Odjava gostiju
+                <button mat-icon-button>      
+                    <mat-icon>list</mat-icon>                            
+                </button>
+            </span>             
+        </div>           
+        
+        <div fxLayout="row" fxLayoutAlign="center center">
+            <span >        
+                <span style="font-size: 18px; font-weight: bold; padding-right: 5px;"> {{newImage.name}}</span>
+                <input  id="imageSelect" 
+                        name="imageSelect"
+                        type="file" 
+                        style="display: none;"
+                        accept=".jpg, .jpeg, .png"
+                        (change)="fileAttached($event)" 
+                        #imageSelect>
+                <mat-form-field class="example-full-width" *ngIf="newImage.name != null" style="padding-right: 5px;">
+                    <mat-label>Naslov (Opciono)</mat-label>
+                    <input matInput name="title" [(ngModel)]="imageTitle" >
+                </mat-form-field>
+                <button mat-raised-button color="primary"  (click)="saveImage()" *ngIf="newImage.name">      
+                        Dodaj                            
+                </button>
+                <button mat-raised-button color="warn"  (click)="cancelImage()" *ngIf="newImage.name">      
+                    Poništi                            
+                </button>                                        
+            </span>
+            <span class="mySpan">
+                    <button mat-icon-button matTooltip="Dodavanje fotografije" (click)="imageSelect.click()">      
+                        <mat-icon>add_photo_alternate</mat-icon>                            
+                    </button>
+            </span>
+            <span class="mySpan">
+                <button mat-icon-button matTooltip="Brisanje fotografija"(click)="deleteSet()">      
+                    <mat-icon>delete</mat-icon>                            
+                </button>
+            </span>           
+            
+        </div>
+        
               
     </div>     
 
@@ -76,7 +93,8 @@
                 <mat-label>Naziv objekta</mat-label>
                 <input matInput name="name" [(ngModel)]="myObject.name" required>
             </mat-form-field>
-            <button mat-stroked-button color="primary" (click)="updateObjectName()" [disabled]="isBlank(myObject.name)">
+            <button mat-stroked-button color="primary" matTooltip="Sačuvaj naziv" 
+                    (click)="updateObjectName()" [disabled]="isBlank(myObject.name)">
                 Sačuvaj naziv
             </button>     
             <br>
@@ -88,7 +106,8 @@
                 <mat-label>Opis objekta</mat-label>
                 <textarea matInput name="details" placeholder="Unesite opis objekta">{{myObject.details}}</textarea>
             </mat-form-field>
-            <button mat-stroked-button color="primary" (click)="updateObjectDetails()">Sačuvaj opis</button>
+            <button mat-stroked-button color="primary" matTooltip="Sačuvaj opis"
+            (click)="updateObjectDetails()">Sačuvaj opis</button>
         </div>   
 
         <div fxLayout="column" fxLayoutAlign="space-evenly center">    
@@ -133,6 +152,7 @@
                 </mat-form-field>                    
             </span>
             <button mat-stroked-button color="primary" 
+                    matTooltip="Podnesi zahtev"
                     [disabled]="newRequest.stars == null ||
                     newRequest.dateFrom == null || 
                     newRequest.dateTo == null"
@@ -163,12 +183,21 @@
             </mat-form-field>
             <button mat-stroked-button color="primary" 
                     [disabled]="!isOwner() || isBlank(grantPremissionUsername)"
+                    matTooltip="Ovlasti ugostitelja"
                     (click)="grantPremission()">Ovlasti ugostitelja</button>
+            <br>
+            <br>
+            <span style="color:rgb(119, 119, 119); font-size:14px; text-align: center;"
+                *ngIf="!isOwner()">Morate biti vlasnik objekta da biste uklonili objekat</span>
+            <button mat-raised-button color="warn" 
+                    matTooltip="Brisanje objekta"
+                    [disabled]="!isOwner()"
+                    (click)="deleteObject()">Ukloni objekat</button>
         </div>  
     </div>
     
 </div>
 
-<app-report-guest *ngIf="showing=='guests'"></app-report-guest>
+<app-report-guest (exitShowingGuestsEmitter)="showObject()" *ngIf="showing=='guests'"></app-report-guest>
 
 
