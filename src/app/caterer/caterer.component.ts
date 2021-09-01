@@ -25,8 +25,10 @@ export class CatererComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
   loggedUser: User = new User();
+  
   allObjects: MyObject[] = [];
   dataSource: MatTableDataSource<MyObject> = new MatTableDataSource();
+
   editModeUserId: string = "";
   editModeUser: User = new User;
   exitMode: boolean = false;  

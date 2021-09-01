@@ -28,7 +28,8 @@
     </div> 
 
     <ng-image-slider [images]="imageContent" *ngIf="imageObjects.length != 0" #slider
-                     (imageClick)="deleteImage($event)" [imagePopup]="!deleting"></ng-image-slider>
+                     (imageClick)="deleteImage($event)" [imagePopup]="!deleting"
+                     [manageImageRatio]="true"></ng-image-slider>
 
     <div style="color:black; font-size:18px; text-align: center;"*ngIf="imageObjects.length == 0">
         <br>Nema fotografija
@@ -198,6 +199,7 @@
     
 </div>
 
-<app-report-guest (exitShowingGuestsEmitter)="showObject()" *ngIf="showing=='guests'"></app-report-guest>
+<app-report-guest (exitShowingGuestsEmitter)="showObject()" [myObject]="myObject"
+                *ngIf="showing=='guests'"></app-report-guest>
 
 

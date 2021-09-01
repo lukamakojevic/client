@@ -1,4 +1,278 @@
-<p>report-guest works!</p>
-<button mat-raised-button color="primary"  (click)="backToObject()">      
-    Nazad                          
-</button> 
+<div fxLayout="row" fxLayoutAlign="space-between center" class="menuBar"> 
+    <div>
+        <span class="bar-title">  
+            Objekat {{myObject.name}}
+        </span>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div [class.selected]="showing=='checkIn'"class="menuOption" (click)="navigate('checkIn')">Prijava gostiju</div>
+        <div [class.selected]="showing=='checkOut'"class="menuOption" (click)="navigate('checkOut')">Odjavljeni gosti</div>  
+    </div> 
+    
+    <button mat-raised-button color="primary" (click)="backToObject()"  matTooltip="Nazad na objekat">      
+        Nazad                          
+    </button>             
+</div>
+<div *ngIf="showing=='checkIn'">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div style="color:red; font-size:18px; text-align: center;" >{{newGuestMessage}}</div>
+        <div style="color:black; font-size:18px; text-align: center;" >{{newGuestInfo}}</div>
+        <mat-toolbar  class="mat-elevation-z8" style="font-size: 14px;">
+          <span> 
+            <form class="example-form">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Naziv</mat-label>
+                  <input matInput name="name" [(ngModel)]="newGuest.name">
+                </mat-form-field>
+            </form>
+          </span> 
+          <span> 
+            <form class="example-form">
+                <mat-form-field class="example-full-width">
+                  <mat-label>Broj dokumenta</mat-label>
+                  <input matInput name="username" type="number" [(ngModel)]="newGuest.idNumber">
+                </mat-form-field>
+            </form>
+          </span>    
+         
+          <span > 
+            <form class="example-form">
+                <mat-form-field >
+                    <mat-label>Tip gosta</mat-label>
+                    <mat-select name="tip" [(ngModel)]="newGuest.kind">
+                      <mat-option *ngFor="let vrsta of vrsteGosta" [value]="vrsta.value">
+                        {{vrsta.viewValue}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </form>
+          </span>
+          <span> 
+            <form class="example-form">
+                <mat-form-field class="example-full-width" >
+                  <mat-label>Starost</mat-label>
+                  <input matInput name="age" type="number" [(ngModel)]="newGuest.age">
+                </mat-form-field>
+            </form>
+          </span> 
+          <span> 
+            <form class="example-form">
+                <mat-form-field class="example-full-width" >
+                  <mat-label>Broj noći</mat-label>
+                  <input matInput name="nights" type="number" [(ngModel)]="newGuest.nights">
+                </mat-form-field>
+            </form>
+          </span> 
+          <span> 
+            <mat-form-field class="example-full-width">
+                <mat-label>Razlog posete</mat-label>
+                <textarea matInput name="details" [(ngModel)]="newGuest.details"></textarea>
+            </mat-form-field>                    
+          </span>          
+          <span> 
+            <form class="example-form">                    
+                <button mat-stroked-button color="primary" matTooltip="Prijavi gosta"   [disabled]="!checkData()"
+                      (click)="addNewGuest()">Prijavi gosta</button>
+            </form>
+          </span>
+          <span> 
+            <form class="example-form">
+                <button mat-stroked-button color="warn" matTooltip="Poništi"
+                (click)="cancelNewGuest()">Poništi</button>
+            </form>                
+          </span>         
+      
+        </mat-toolbar>
+    </div>
+    <br>
+    <!--Tabela-->
+    <div >
+        <p style="font-size: 20px; text-align: center; font-weight: bold;">Pregled gostiju</p> 
+        <div fxLayout="row" fxLayoutAlign="center center" class="menuBar">
+            <span *ngIf="editModeGuestId != ''"> 
+                <form>                    
+                    <button mat-raised-button color="primary"style="font-size: 12px;" matTooltip="Sačuvaj"
+                    (click)="save()">Sačuvaj</button>
+                </form>
+            </span>
+            <span *ngIf="editModeGuestId != ''"> 
+                <form>
+                    <button mat-raised-button color="warn" style="font-size: 12px;" matTooltip="Otkaži"
+                    (click)="cancel()">Otkaži</button>
+                </form>                
+            </span>
+        </div>                 
+        
+        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" >   
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Naziv </th>
+                <td mat-cell *matCellDef="let element">
+                <span *ngIf="element._id != editModeGuestId"> {{element.name}} </span>
+                <span *ngIf="element._id == editModeGuestId"> 
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Naziv</mat-label>
+                            <input matInput name="name" [(ngModel)]="editModeGuest.name">
+                        </mat-form-field>
+                    </form>
+                </span> 
+                </td>
+            </ng-container> 
+
+            <ng-container matColumnDef="idNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Broj dokumenta </th>
+                <td mat-cell *matCellDef="let element">
+                    <span *ngIf="element._id != editModeGuestId"> {{element.idNumber}} </span>
+                    <span *ngIf="element._id == editModeGuestId"> 
+                        <form class="example-form">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Broj dokumenta</mat-label>
+                                <input matInput name="idNum" type="number" [(ngModel)]="editModeGuest.idNumber">
+                            </mat-form-field>
+                        </form>
+                    </span>
+                </td>
+            </ng-container>   
+
+            <ng-container matColumnDef="kind">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tip gosta </th>
+                <td mat-cell *matCellDef="let element">
+                    <span *ngIf="element.kind == 0 && element._id != editModeGuestId"> Strano lice </span>
+                    <span *ngIf="element.kind == 1 && element._id != editModeGuestId"> Domaće lice </span>
+                    <form class="example-form" *ngIf="element._id == editModeGuestId">
+                        <mat-form-field >
+                            <mat-label>Tip gosta</mat-label>
+                            <mat-select name="tip" [(ngModel)]="editModeGuest.kind">
+                            <mat-option *ngFor="let vrsta of vrsteGosta" [value]="vrsta.value">
+                                {{vrsta.viewValue}}
+                            </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </form>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="age">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Starost </th>
+                <td mat-cell *matCellDef="let element">
+                    <span *ngIf="element._id != editModeGuestId"> {{element.age}} </span>
+                    <span *ngIf="element._id == editModeGuestId"> 
+                        <form class="example-form">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Starost</mat-label>
+                                <input matInput name="age" type="number" [(ngModel)]="editModeGuest.age">
+                            </mat-form-field>
+                        </form>
+                    </span>
+                </td>
+            </ng-container>
+           
+            <ng-container matColumnDef="dateCheckIn">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Datum prijave </th>
+                <td mat-cell *matCellDef="let element">
+                    <span *ngIf="element._id != editModeGuestId"> {{element.dateCheckIn}} </span>
+                    <span *ngIf="element._id == editModeGuestId"> 
+                        <form class="example-form">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Datum prijave</mat-label>
+                                <input matInput name="idNum" type="date" [(ngModel)]="editModeGuest.dateCheckIn">
+                            </mat-form-field>
+                        </form>
+                    </span>
+                </td>                   
+            </ng-container>
+
+            <ng-container matColumnDef="nights">
+               <th mat-header-cell *matHeaderCellDef mat-sort-header> Broj noći </th>
+               <td mat-cell *matCellDef="let element">
+                <span *ngIf="element._id != editModeGuestId"> {{element.nights}} </span>
+                <span *ngIf="element._id == editModeGuestId"> 
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Broj noći</mat-label>
+                            <input matInput name="age" type="number" [(ngModel)]="editModeGuest.nights">
+                        </mat-form-field>
+                    </form>
+                </span>
+               </td>
+            </ng-container>
+
+            <ng-container matColumnDef="details">
+               <th mat-header-cell *matHeaderCellDef mat-sort-header> Razlog posete </th>
+               <td mat-cell *matCellDef="let element">
+                    <span *ngIf="element._id != editModeGuestId"> {{element.details}} </span>
+                    <span *ngIf="element._id == editModeGuestId"> 
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Razlog posete</mat-label>
+                        <textarea matInput name="details" [(ngModel)]="editModeGuest.details"></textarea>
+                    </mat-form-field>                    
+                    </span>
+                </td>
+            </ng-container>
+
+            <!-- Sačuvaj Column -->
+            <ng-container matColumnDef="buttonsSave">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
+                <td mat-cell *matCellDef="let element">  
+                    <span *ngIf="element._id != editModeGuestId"> 
+                        <form>                    
+                            <button mat-icon-button matTooltip="Izmeni prijavu" class="example-icon delete-icon"
+                            (click)="edit(element)">                  
+                                <mat-icon>edit</mat-icon>          
+                            </button>
+                        </form>
+                    </span> 
+                </td>
+            </ng-container> 
+            <!-- Odjava Column -->
+            <ng-container matColumnDef="buttonsCheckOut"> 
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>           
+                <td mat-cell *matCellDef="let element">             
+                    <span *ngIf="editModeGuestId == ''"> 
+                        <form>
+                            <button mat-icon-button matTooltip="Odjavi gosta" class="example-icon delete-icon"
+                            (click)="checkOutGuest(element)">                  
+                            <mat-icon>how_to_reg</mat-icon>          
+                        </button>
+                        </form>                
+                    </span>
+                </td>
+            </ng-container>
+               
+            <!-- Izbrisi Column -->
+            <ng-container matColumnDef="buttonsDelete"> 
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>           
+                <td mat-cell *matCellDef="let element">             
+                    <span *ngIf="editModeGuestId == ''"> 
+                        <form>
+                            <button mat-icon-button matTooltip="Izbriši prijavu" class="example-icon delete-icon"
+                            (click)="deleteGuest(element)">                  
+                            <mat-icon>delete</mat-icon>          
+                            </button>
+                        </form>                
+                    </span>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>
+
+<div *ngIf="showing=='checkOut'">
+    <!--Tabela-->
+    <div>
+        <p style="font-size: 20px; text-align: center; font-weight: bold;">Pregled gostiju</p>
+        <table mat-table [dataSource]="dataSource2" matSort class="mat-elevation-z8" >          
+        
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+        </table>
+    </div>
+</div>
+
+  
+
+ 

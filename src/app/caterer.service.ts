@@ -6,7 +6,7 @@ import { MyRequest } from './models/request';
 @Injectable({
   providedIn: 'root'
 })
-export class CatererService { 
+export class CatererService {  
   
   uri = 'http://localhost:4000';
 
@@ -100,5 +100,19 @@ export class CatererService {
 
     return this.http.post(`${this.uri}/caterer/deleteObject`, data);
   }
+
+  addNewGuest(guest: any) {
+
+    return this.http.post(`${this.uri}/caterer/addNewGuest`, guest);
+
+  } 
+
+  getAllGuests(id: any) {
+
+    const data = { "id" : id };
+
+    return this.http.post(`${this.uri}/caterer/getAllGuests`, data);
+
+  }  
 
 }
