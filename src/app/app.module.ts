@@ -19,6 +19,7 @@ import { ShowobjectComponent } from './showobject/showobject.component';
 import { NgImageSliderModule } from 'ng-image-slider';
 import { DialogOverview, ReportGuestComponent } from './report-guest/report-guest.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { CanActivateGuard } from './guard.service';
 
 
 @NgModule({
@@ -47,7 +48,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     NgImageSliderModule,
     MatDialogModule 
   ],
-  providers: [],
+  providers: [CanActivateGuard],
   bootstrap: [AppComponent], 
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

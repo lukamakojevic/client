@@ -20,9 +20,9 @@ export class WelcomeComponent implements OnInit {
   }
 
   login() {
-
+    
     this.message = "";
-
+    
     this.loginService.login(this.username , this.password).subscribe( (user: any) => {
       
       if(user.type != undefined){
@@ -45,6 +45,7 @@ export class WelcomeComponent implements OnInit {
       }
       else{
 
+        localStorage.clear();
         this.message = user;
 
       }
