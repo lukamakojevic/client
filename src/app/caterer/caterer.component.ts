@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -13,16 +13,23 @@ import { User } from '../models/user';
   styleUrls: ['./caterer.component.css']
 })
 export class CatererComponent implements OnInit {
-  displayedColumns: string[] = [ 'name', 'type' , 'details' , 'stars' , 'viewButtons'];
+  displayedColumns: string[] = [ 'name', 'address','type' , 'details' , 'stars' , 'viewButtons'];
   vrsteObjekata: Vrsta[] = [
-    {value: 1, viewValue: 'Kafana'},
-    {value: 2, viewValue: 'Restoran'},
-    {value: 3, viewValue: 'Bar'},
-    {value: 4, viewValue: 'Kafić'}
+    {value: 1, viewValue: 'Apartman'},
+    {value: 2, viewValue: 'Hotel'},
+    {value: 3, viewValue: 'Stan'},
+    {value: 4, viewValue: 'Motel'},
+    {value: 5, viewValue: 'Kamp'} , 
+    {value: 6, viewValue: 'Kuća'} ,
+    {value: 7, viewValue: 'Soba'} ,
+    {value: 8, viewValue: 'Seosko domaćinstvo'}
   ];
-  
 
   @ViewChild(MatSort) sort: MatSort = new MatSort();
+
+  @ViewChild('filter') filter!: ElementRef<HTMLInputElement>;  
+
+  filterActive: boolean = false;
 
   loggedUser: User = new User();
   
@@ -64,6 +71,8 @@ export class CatererComponent implements OnInit {
 
     this.showingObject = row;
     this.showing = "singleObject";
+
+    this.clearFilter()
   }
 
   exitView(event:any){
@@ -150,6 +159,22 @@ export class CatererComponent implements OnInit {
       this.newObjectInfo ="";
 
     }
+  }
+
+  applyFilter(filter : any){
+    this.filterActive = true;
+    this.dataSource.filter = filter.target.value.trim().toLocaleLowerCase();
+  }  
+
+  clearFilter(){
+
+    this.filterActive = false;
+
+    if(this.filter){
+      this.filter.nativeElement.value='';
+    }        
+
+    this.dataSource.filter = "";
   }
 
   logOut(){

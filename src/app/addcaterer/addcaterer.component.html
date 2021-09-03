@@ -28,6 +28,14 @@
                 </span>
                 <br><br>
                 <span> 
+                    <b style="font-size: 18px;">Unesite adresu objekta</b> <br><br>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Adresu objekta</mat-label>
+                        <input matInput name="address" [(ngModel)]="newObject.address" required>
+                    </mat-form-field>                    
+                </span>
+                <br><br>
+                <span> 
                     <b style="font-size: 18px;">Unesite detalje o objektu</b> <br><br>
                     <mat-form-field class="example-full-width">
                         <mat-label>Opis objekta</mat-label>
@@ -37,7 +45,8 @@
             </div>
             <br>             
             <button mat-stroked-button color="primary" matStepperPrevious>Prethodni korak</button>  
-            <button mat-stroked-button color="primary" [disabled]="isBlank(newObject.name)" matStepperNext>Sledeći korak</button> 
+            <button mat-stroked-button color="primary" [disabled]="isBlank(newObject.name) || isBlank(newObject.address)"  
+            matStepperNext>Sledeći korak</button> 
         </mat-step>
         <mat-step label="Kategorizacija">
             <div>
@@ -103,14 +112,22 @@
                     </tr>
                     <tr>
                         <td class="my-th">Tip objekta</td>
-                        <td *ngIf="newObject.type == 1"> Kafana </td>
-                        <td *ngIf="newObject.type == 2"> Restoran </td>
-                        <td *ngIf="newObject.type == 3"> Bar </td>
-                        <td *ngIf="newObject.type == 4"> Kafić </td>
+                        <td *ngIf="newObject.type == 1"> Apartman </td>
+                        <td *ngIf="newObject.type == 2"> Hotel </td>
+                        <td *ngIf="newObject.type == 3"> Stan </td>
+                        <td *ngIf="newObject.type == 4"> Motel </td>
+                        <td *ngIf="newObject.type == 5"> Kamp </td>
+                        <td *ngIf="newObject.type == 6"> Kuća </td>
+                        <td *ngIf="newObject.type == 7"> Soba </td>
+                        <td *ngIf="newObject.type == 8"> Seosko domaćinstvo </td>  
                     </tr>
                     <tr>
                         <td class="my-th">Naziv objekta</td>
                         <td>{{newObject.name}}</td>
+                    </tr>
+                    <tr>
+                        <td class="my-th">Adresa objekta</td>
+                        <td>{{newObject.address}}</td>
                     </tr>
                     <tr>
                         <td class="my-th">Opis</td>

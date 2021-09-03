@@ -7,17 +7,36 @@
 
     <div fxLayout="row" fxLayoutAlign="space-between center">
         <div [class.selected]="showing=='checkIn'"class="menuOption" (click)="navigate('checkIn')">Prijava gostiju</div>
-        <div [class.selected]="showing=='checkOut'"class="menuOption" (click)="navigate('checkOut')">Odjavljeni gosti</div>  
+        <div [class.selected]="showing=='checkOut'"class="menuOption" (click)="navigate('checkOut')">Odjavljeni gosti/Boravišne takse</div>  
     </div> 
     
     <button mat-raised-button color="primary" (click)="backToObject()"  matTooltip="Nazad na objekat">      
         Nazad                          
     </button>             
 </div>
-<div *ngIf="showing=='checkIn'">
-    <div fxLayout="row" fxLayoutAlign="space-between center">
-        <div style="color:red; font-size:18px; text-align: center;" >{{newGuestMessage}}</div>
-        <div style="color:black; font-size:18px; text-align: center;" >{{newGuestInfo}}</div>
+<div [hidden]="showing!='checkIn'">
+    <div class="menuBar">
+        <span style="color:red; " >{{newGuestMessage}}</span>
+        <span style="color:black; " >{{newGuestInfo}}</span>
+    </div>  
+    <div fxLayout="row" fxLayoutAlign="center center" class="menuBar">
+        <span >        
+            <span style="font-size: 16px; padding-right: 5px;"> Učitaj gosta iz fajla</span>
+            <input  id="fileSelect" 
+                    name="fileSelect"
+                    type="file" 
+                    style="display: none;"
+                    accept=".json , .txt"
+                    (change)="fileAttached($event)" 
+                    #fileSelect>                                                        
+        </span>
+        <span class="mySpan">
+                <button mat-icon-button matTooltip="Učitaj gosta iz fajla" (click)="fileSelect.click()">      
+                    <mat-icon>attach_file</mat-icon>                            
+                </button>
+        </span>         
+    </div>  
+    <div fxLayout="row" fxLayoutAlign="space-between center">        
         <mat-toolbar  class="mat-elevation-z8" style="font-size: 14px;">
           <span> 
             <form class="example-form">
@@ -88,7 +107,16 @@
     <br>
     <!--Tabela-->
     <div >
-        <p style="font-size: 20px; text-align: center; font-weight: bold;">Pregled gostiju</p> 
+        <p style="font-size: 20px; text-align: center; font-weight: bold;">Prijavljeni gosti</p>
+        <div fxLayout="row" fxLayoutAlign="center center" class="menuBarNoPadding">
+            <input #filter1 (keyup)="applyFilter1($event)" matInput class="filterInput"
+                placeholder="&#xF002;  Pretraži goste..."
+                (blur)="clearFilter1()"> 
+            <button mat-icon-button matTooltip="Poništi pretragu" *ngIf="filterActive && filter1.value!=''"
+                    (click)="clearFilter1()">                  
+                <mat-icon>close</mat-icon>          
+            </button>        
+        </div> 
         <div fxLayout="row" fxLayoutAlign="center center" class="menuBar">
             <span *ngIf="editModeGuestId != ''"> 
                 <form>                    
@@ -104,7 +132,7 @@
             </span>
         </div>                 
         
-        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" >   
+        <table mat-table #sorter1="matSort" [dataSource]="dataSource" matSort class="mat-elevation-z8" >   
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Naziv </th>
                 <td mat-cell *matCellDef="let element">
@@ -138,8 +166,8 @@
             <ng-container matColumnDef="kind">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Tip gosta </th>
                 <td mat-cell *matCellDef="let element">
-                    <span *ngIf="element.kind == 0 && element._id != editModeGuestId"> Strano lice </span>
-                    <span *ngIf="element.kind == 1 && element._id != editModeGuestId"> Domaće lice </span>
+                    <span *ngIf="element.kind == 1 && element._id != editModeGuestId"> Strano lice </span>
+                    <span *ngIf="element.kind == 2 && element._id != editModeGuestId"> Domaće lice </span>
                     <form class="example-form" *ngIf="element._id == editModeGuestId">
                         <mat-form-field >
                             <mat-label>Tip gosta</mat-label>
@@ -260,14 +288,103 @@
     </div>
 </div>
 
-<div *ngIf="showing=='checkOut'">
+<div [hidden]="showing!='checkOut'">
     <!--Tabela-->
     <div>
-        <p style="font-size: 20px; text-align: center; font-weight: bold;">Pregled gostiju</p>
-        <table mat-table [dataSource]="dataSource2" matSort class="mat-elevation-z8" >          
+        <br>
+        <p style="font-size: 20px; text-align: center; font-weight: bold;">Ukupan dug za boravišnu taksu: {{totalDebt}} [RSD]</p>
+        <div fxLayout="row" fxLayoutAlign="center center" class="menuBarNoPadding">
+            <input #filter2 (keyup)="applyFilter2($event)" matInput class="filterInput"
+                placeholder="&#xF002;  Pretraži goste..."
+                (blur)="clearFilter2()"> 
+            <button mat-icon-button matTooltip="Poništi pretragu" *ngIf="filterActive && filter2.value!=''"
+                    (click)="clearFilter2()">                  
+                <mat-icon>close</mat-icon>          
+            </button>        
+        </div>
+        <div style="text-align: center;">            
+            <span style="color:rgb(0, 0, 0); font-size:18px;">{{message}}</span>
+        </div>
+        <table mat-table #sorter2="matSort" [dataSource]="dataSource2" matSort class="mat-elevation-z8" > 
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Naziv </th>
+                <td mat-cell *matCellDef="let element">
+                    <span> {{element.name}} </span>                
+                </td>
+            </ng-container> 
+
+            <ng-container matColumnDef="idNumber">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Broj dokumenta </th>
+                <td mat-cell *matCellDef="let element">
+                    <span > {{element.idNumber}} </span>                    
+                </td>
+            </ng-container>   
+
+            <ng-container matColumnDef="kind">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tip gosta </th>
+                <td mat-cell *matCellDef="let element">
+                    <span *ngIf="element.kind == 1 "> Strano lice </span>
+                    <span *ngIf="element.kind == 2 "> Domaće lice </span>                    
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="age">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Starost </th>
+                <td mat-cell *matCellDef="let element">
+                    <span > {{element.age}} </span>
+                </td>
+            </ng-container>
+           
+            <ng-container matColumnDef="dateCheckIn">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Datum prijave </th>
+                <td mat-cell *matCellDef="let element">
+                    <span > {{element.dateCheckIn}} </span>                    
+                </td>                   
+            </ng-container>
+
+            <ng-container matColumnDef="dateCheckOut">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Datum odjave </th>
+                <td mat-cell *matCellDef="let element">
+                    <span > {{element.dateCheckIn}} </span>                    
+                </td>                   
+            </ng-container>
+
+            <ng-container matColumnDef="nights">
+               <th mat-header-cell *matHeaderCellDef mat-sort-header> Broj noći </th>
+               <td mat-cell *matCellDef="let element">
+                    <span> {{element.nights}} </span>
+               </td>
+            </ng-container>
+
+            <ng-container matColumnDef="details">
+               <th mat-header-cell *matHeaderCellDef mat-sort-header> Razlog posete </th>
+               <td mat-cell *matCellDef="let element">
+                    <span> {{element.details}} </span>
+                </td>
+            </ng-container>   
+            <ng-container matColumnDef="debt">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Dug [RSD] </th>
+                <td mat-cell *matCellDef="let element">
+                     <span> {{element.debt}} </span>
+                 </td>
+            </ng-container> 
+            <!-- Plati dug Column -->
+            <ng-container matColumnDef="buttonsPay"> 
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>           
+                <td mat-cell *matCellDef="let element">             
+                    <span *ngIf="element.debt > 0"> 
+                        <form>
+                            <button mat-icon-button matTooltip="Plati boravišnu taksu" class="example-icon delete-icon"
+                            (click)="openDialog(element)">                  
+                            <mat-icon>payment</mat-icon>          
+                            </button>
+                        </form>                
+                    </span>
+                </td>
+            </ng-container>     
         
         
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
         <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
         </table>
     </div>

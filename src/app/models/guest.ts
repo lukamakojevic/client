@@ -10,4 +10,5 @@ export class Guest{
     details: string = "";
     checkedOut: boolean = false;
     dateCheckOut: string= "";    
+    debt: number = 0;
 }

@@ -1,4 +1,4 @@
-import { Component , OnInit } from '@angular/core';
+import { Component , ElementRef, OnInit } from '@angular/core';
 import { ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
 import { AdminService } from '../admin.service';
@@ -28,8 +28,8 @@ export interface TipReg {
 })
 
 export class AdminComponent implements OnInit{
-  displayedColumns: string[] = ['name', 'username', 'password' , 'type', 'kind'
-                               , 'registeredFlag' ,'buttonsSave','buttonsCancel' , 'buttonsDelete'];
+  displayedColumns: string[] = ['name', 'username', 'password' , 'type', 'kind' , 'address'
+                               , 'registeredFlag' , 'buttonsEdit'];
 
   tipoviKorisnika: Tip[] = [
     {value: 0, viewValue: 'Admin'},
@@ -50,6 +50,10 @@ export class AdminComponent implements OnInit{
   ];
 
   @ViewChild(MatSort) sort: MatSort = new MatSort();
+
+  @ViewChild('filter') filter!: ElementRef<HTMLInputElement>;  
+
+  filterActive: boolean = false;
 
   loggedUser: User | undefined;
   allUsers: User[] | undefined;
@@ -105,22 +109,24 @@ export class AdminComponent implements OnInit{
 
   addNewUser(){
 
-    if(this.newUser.name == null || this.newUser.name == undefined){
+    this.newUserMessage = "";
+
+    if(this.newUser.name == null || this.newUser.name == undefined || this.newUser.name == ""){
       this.newUserMessage = "Unesite naziv korisnika."
       return;
     }
 
-    if(this.newUser.username == null || this.newUser.username == undefined){
+    if(this.newUser.username == null || this.newUser.username == undefined || this.newUser.username == ""){
       this.newUserMessage = "Unesite korisničko ime."
       return;
     }
 
-    if(this.newUser.password == null || this.newUser.password == undefined){
+    if(this.newUser.password == null || this.newUser.password == undefined || this.newUser.password == ""){
       this.newUserMessage = "Unesite šifru."
       return;
     }    
 
-    if(this.newUser.type == null || this.newUser.type == undefined){
+    if(this.newUser.type != 0 && this.newUser.type == null || this.newUser.type == undefined){
       this.newUserMessage = "Unesite tip korisnika."
       return;
     }
@@ -130,13 +136,21 @@ export class AdminComponent implements OnInit{
       return;
     }
 
+    if(this.newUser.address == null || this.newUser.address == undefined || this.newUser.address == ""){
+      this.newUserMessage = "Unesite adresu korisnika."
+      return;
+    }
+
     if(this.newUser.registeredFlag == null || this.newUser.registeredFlag == undefined){
       this.newUser.registeredFlag = false;
     }
 
     this.adminService.addNewUser(this.newUser).subscribe((data: any)=>{
       this.newUserMessage = data;
+      this.newUser = new User();
+
       this.adminService.getAllUsers().subscribe((data: any)=>{
+
         this.allUsers = data;
         this.dataSource = new MatTableDataSource(this.allUsers);
         this.dataSource.sort = this.sort;
@@ -169,6 +183,51 @@ export class AdminComponent implements OnInit{
     localStorage.clear();
     this.router.navigate(['']);
   }
+
+  checkData(){
+    if(this.editModeUser.name == null || this.editModeUser.name == undefined || this.editModeUser.name == ""){
+      return false;
+    }
+
+    if(this.editModeUser.username == null || this.editModeUser.username == undefined || this.editModeUser.username == ""){
+      return false;
+    }
+
+    if(this.editModeUser.password == null || this.editModeUser.password == undefined || this.editModeUser.password == ""){
+      return false;
+    }    
+
+    if(this.editModeUser.type != 0 && this.editModeUser.type == null || this.editModeUser.type == undefined){
+      return false;
+    }
+
+    if(this.editModeUser.kind == null || this.editModeUser.kind == undefined){
+      return false;
+    }
+
+    if(this.editModeUser.address == null || this.editModeUser.address == undefined || this.editModeUser.address == ""){
+      return false;
+    }
+    return true;
+
+  }
+
+  applyFilter(filter : any){
+    this.filterActive = true;
+    this.dataSource.filter = filter.target.value.trim().toLocaleLowerCase();
+  }  
+
+  clearFilter(){
+
+    this.filterActive = false;
+
+    if(this.filter){
+      this.filter.nativeElement.value='';
+    }        
+
+    this.dataSource.filter = "";
+  }
+
 
 }
 

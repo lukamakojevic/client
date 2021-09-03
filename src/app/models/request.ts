@@ -8,4 +8,5 @@ export class MyRequest{
     dateTo: string | undefined;
     status : string | undefined;
     approvedById : string | undefined;
+    objectName?: string;
 }

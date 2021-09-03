@@ -16,3 +16,20 @@ th.mat-sort-header-sorted {
 .row:hover{
     background-color: rgb(240, 240, 240);
 }
+
+.menuBarNoPadding{
+    padding: 8px;
+    background-color: white;
+}
+
+.filterInput{
+    font-family: Arial, FontAwesome;    
+    font-size: 16px;
+    font-weight: bold;
+    color:gray;
+    padding: 5px;
+    text-align: center;    
+    border-radius: 20px;
+    outline: none;
+    width: 20%;
+}

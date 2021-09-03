@@ -34,6 +34,15 @@
 <br>
 <div *ngIf="showing=='allObjects'">
     <p style="font-size: 20px; text-align: center; font-weight: bold;">Pregled objekata</p>
+    <div fxLayout="row" fxLayoutAlign="center center" class="menuBarNoPadding">
+        <input #filter (keyup)="applyFilter($event)" matInput class="filterInput"
+            placeholder="&#xF002;  Pretraži objekte..."
+            (blur)="clearFilter()"> 
+        <button mat-icon-button matTooltip="Poništi pretragu" *ngIf="filterActive && filter.value!=''"
+                (click)="clearFilter()">                  
+            <mat-icon>close</mat-icon>          
+        </button>        
+    </div> 
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" >
         <!-- Naziv Column -->
         <ng-container matColumnDef="name">
@@ -42,16 +51,29 @@
             <span> {{element.name}} </span>
             
           </td>
-        </ng-container>   
+        </ng-container>  
+        
+        <!-- Adresa Column -->
+        <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Adresa objekta</th>
+            <td mat-cell *matCellDef="let element">
+              <span> {{element.address}} </span>
+              
+            </td>
+          </ng-container>
        
          <!-- Vrsta Column -->
          <ng-container matColumnDef="type">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Vrsta objekta </th>
             <td mat-cell *matCellDef="let element" >           
-                <span *ngIf="element.type == 1"> Kafana </span>
-                <span *ngIf="element.type == 2"> Restoran </span>
-                <span *ngIf="element.type == 3"> Bar </span>
-                <span *ngIf="element.type == 4"> Kafić </span>                
+                <span *ngIf="element.type == 1"> Apartman </span>
+                <span *ngIf="element.type == 2"> Hotel </span>
+                <span *ngIf="element.type == 3"> Stan </span>
+                <span *ngIf="element.type == 4"> Motel </span>
+                <span *ngIf="element.type == 5"> Kamp </span>
+                <span *ngIf="element.type == 6"> Kuća </span>
+                <span *ngIf="element.type == 7"> Soba </span>
+                <span *ngIf="element.type == 8"> Seosko domaćinstvo </span>                            
             </td>
         </ng-container>
 

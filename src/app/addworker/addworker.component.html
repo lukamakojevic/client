@@ -46,39 +46,50 @@
                                                                             || newCaterer.password== ''" disabled>Sledeći korak</button>
         </mat-step>
         <mat-step label="Detalji">
-            <div>
-                <span> 
-                    <b style="font-size: 18px;">Unesite naziv ugostitelja</b> <br><br>
-                    <mat-form-field class="example-full-width">
-                        <mat-label>Naziv ugostitelja</mat-label>
-                        <input matInput name="name" [(ngModel)]="newCaterer.name" required>
-                    </mat-form-field>                    
-                </span>
-                <br><br>
-                <span> 
-                    <b style="font-size: 18px;">Registrovan kod nadležnog organa?</b> <br><br>
-                    <mat-form-field>
-                        <mat-label>Registrovan</mat-label>
-                        <mat-select name="reg" [(ngModel)]="newCaterer.registeredFlag" required>
-                          <mat-option *ngFor="let reg of tipoviRegistracije" [value]="reg.value">
-                            {{reg.viewValue}}
-                          </mat-option>
-                        </mat-select>
-                      </mat-form-field>                    
-                </span>
-                <br><br>
-                <span> 
-                    <b style="font-size: 18px;">Unesite opis ugostitelja</b> <br><br>
-                    <mat-form-field class="example-full-width">
-                        <mat-label>Opis ugostitelja</mat-label>
-                        <textarea matInput name="details" [(ngModel)]="newCaterer.details"></textarea>
-                    </mat-form-field>                    
-                </span>
+            <div fxLayout="row" fxLayoutAlign="space-around center">
+                <div fxLayout="column" fxLayoutAlign="space-around center">
+                    <span> 
+                        <b style="font-size: 18px;">Unesite naziv ugostitelja</b> <br><br>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Naziv ugostitelja</mat-label>
+                            <input matInput name="name" [(ngModel)]="newCaterer.name" required>
+                        </mat-form-field>                    
+                    </span>
+                    <span> 
+                        <b style="font-size: 18px;">Unesite adresu ugostitelja</b> <br><br>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Adresa ugostitelja</mat-label>
+                            <input matInput name="address" [(ngModel)]="newCaterer.address" required>
+                        </mat-form-field>                    
+                    </span>
+                </div>
+                <div fxLayout="column" fxLayoutAlign="space-around center">
+                    <span> 
+                        <b style="font-size: 18px;">Registrovan kod nadležnog organa?</b> <br><br>
+                        <mat-form-field>
+                            <mat-label>Registrovan</mat-label>
+                            <mat-select name="reg" [(ngModel)]="newCaterer.registeredFlag" required>
+                              <mat-option *ngFor="let reg of tipoviRegistracije" [value]="reg.value">
+                                {{reg.viewValue}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>                    
+                    </span>
+                    <span> 
+                        <b style="font-size: 18px;">Unesite opis ugostitelja</b> <br><br>
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Opis ugostitelja</mat-label>
+                            <textarea matInput name="details" [(ngModel)]="newCaterer.details"></textarea>
+                        </mat-form-field>                    
+                    </span>
+                </div>                
             </div>
             <br>             
             <button mat-stroked-button color="primary" matStepperPrevious>Prethodni korak</button>  
             <button mat-stroked-button color="primary" 
-                [disabled]="isBlank(newCaterer.name) || newCaterer.registeredFlag==null"matStepperNext>Sledeći korak</button> 
+                [disabled]="isBlank(newCaterer.name) 
+                            || isBlank(newCaterer.address)
+                            || newCaterer.registeredFlag==null"matStepperNext>Sledeći korak</button> 
             
         </mat-step>
         <mat-step label="Pregled">
@@ -102,6 +113,10 @@
                     <tr>
                         <th>Naziv ugostitelja</th>
                         <td>{{newCaterer.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Adresa ugostitelja</th>
+                        <td>{{newCaterer.address}}</td>
                     </tr>
                     <tr>
                         <th>Registrovan</th>

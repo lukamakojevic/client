@@ -13,11 +13,12 @@ import { AdminComponent } from './admin/admin.component';
 import { CatererComponent } from './caterer/caterer.component';
 import { WorkerComponent } from './worker/worker.component';
 import { AddworkerComponent } from './addworker/addworker.component';
-import {MatStepperModule} from '@angular/material/stepper';
+import { MatStepperModule} from '@angular/material/stepper';
 import { AddcatererComponent } from './addcaterer/addcaterer.component';
 import { ShowobjectComponent } from './showobject/showobject.component';
 import { NgImageSliderModule } from 'ng-image-slider';
-import { ReportGuestComponent } from './report-guest/report-guest.component';
+import { DialogOverview, ReportGuestComponent } from './report-guest/report-guest.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { ReportGuestComponent } from './report-guest/report-guest.component';
     AddworkerComponent,
     AddcatererComponent,
     ShowobjectComponent,
-    ReportGuestComponent
+    ReportGuestComponent,
+    DialogOverview
   ],
   imports: [
     BrowserModule,
@@ -42,7 +44,8 @@ import { ReportGuestComponent } from './report-guest/report-guest.component';
     AngularMaterialModule , 
     HttpClientModule ,
     MatStepperModule , 
-    NgImageSliderModule
+    NgImageSliderModule,
+    MatDialogModule 
   ],
   providers: [],
   bootstrap: [AppComponent], 

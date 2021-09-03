@@ -6,7 +6,7 @@ import { MyRequest } from './models/request';
 @Injectable({
   providedIn: 'root'
 })
-export class CatererService {  
+export class CatererService {
   
   uri = 'http://localhost:4000';
 
@@ -57,6 +57,16 @@ export class CatererService {
     return this.http.post(`${this.uri}/caterer/updateObjectDetails`, data);
 
   }
+
+  updateObjectAddress(myObject: MyObject) {
+
+    const data = { "_id" : myObject._id,
+                   "address" : myObject.address}
+
+    return this.http.post(`${this.uri}/caterer/updateObjectAddress`, data);
+
+  }  
+    
 
   grantPremission(objectId: any, userId: string) {
 
@@ -113,6 +123,33 @@ export class CatererService {
 
     return this.http.post(`${this.uri}/caterer/getAllGuests`, data);
 
+  }  
+
+  updateGuest(guest: any) {
+
+    return this.http.post(`${this.uri}/caterer/updateGuest`, guest);
+
+  }  
+
+  removeGuest(guest: any) {
+
+    return this.http.post(`${this.uri}/caterer/removeGuest`, guest);
+
+  } 
+
+  getAllTaxes(id: any) {
+
+    const data = { "objectId" : id };
+
+    return this.http.post(`${this.uri}/caterer/getAllTaxes`, data);
+
+  }
+
+  payTax(result: any, taxId: any) {
+
+    const data = { "bill" : result  , "taxId" : taxId};
+
+    return this.http.post(`${this.uri}/caterer/payTax`, data);
   }  
 
 }

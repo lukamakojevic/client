@@ -40,6 +40,8 @@ export class ShowobjectComponent implements OnInit {
   requestError: string = "";  
   premissionInfo: string = "";
   premissionError: string = "";
+  addressInfo: string = ""
+  addressError: string = ""
 
 
   imageObjects: Array<object> = [];
@@ -112,6 +114,8 @@ export class ShowobjectComponent implements OnInit {
     this.requestError = "";   
     this.premissionInfo = "";
     this.premissionError = "";
+    this.addressInfo = "";
+    this.addressError = "";
   }
 
   exitShowingObject(){    
@@ -135,10 +139,21 @@ export class ShowobjectComponent implements OnInit {
 
   updateObjectDetails(){
     this.resetMessages();
-    this.catererService.updateObjectName(this.myObject).subscribe( (data :any)=>{
+    this.catererService.updateObjectDetails(this.myObject).subscribe( (data :any)=>{
 
       if(data.message == "") this.detailsInfo = "Opis sačuvan."
       else this.detailsError = data.message;
+
+      this.showingObjectChanged();
+    });
+  }
+
+  updateObjectAddress(){
+    this.resetMessages();
+    this.catererService.updateObjectAddress(this.myObject).subscribe( (data :any)=>{
+
+      if(data.message == "") this.addressInfo = "Adresa sačuvana."
+      else this.addressError = data.message;
 
       this.showingObjectChanged();
     });
@@ -182,8 +197,7 @@ export class ShowobjectComponent implements OnInit {
     
   }
 
-  fileAttached(event: any){
-    console.log(event)
+  fileAttached(event: any){    
     this.newImage = event.target.files[0];
   }
 

@@ -1,22 +1,23 @@
-<div class="mat-elevation-z8" *ngIf="showing!='guests'">
+<div class="mat-elevation-z8" *ngIf="showing!='guests'">    
+    <div fxLayout="row" fxLayoutAlign="center center" style="padding: 5px;"> 
+        <span style="color: rgb(255, 153, 0); font-size: 30px;">  
+            <span *ngIf="myObject.stars == 1" > ☆ </span>
+            <span *ngIf="myObject.stars == 2" > ☆☆ </span>
+            <span *ngIf="myObject.stars == 3" > ☆☆☆ </span>
+            <span *ngIf="myObject.stars == 4" > ☆☆☆☆ </span>
+            <span *ngIf="myObject.stars == 5" > ☆☆☆☆☆ </span>
+        </span>        
+    </div>
     <div fxLayout="row" fxLayoutAlign="space-between center" style="padding: 3px;">              
             <span class="bar-title">  
-                {{myObject.name}}
-            </span>
-            <span style="color: rgb(255, 153, 0); font-size: 30px;">  
-                <span *ngIf="myObject.stars == 1" > ☆ </span>
-                <span *ngIf="myObject.stars == 2" > ☆☆ </span>
-                <span *ngIf="myObject.stars == 3" > ☆☆☆ </span>
-                <span *ngIf="myObject.stars == 4" > ☆☆☆☆ </span>
-                <span *ngIf="myObject.stars == 5" > ☆☆☆☆☆ </span>
+                {{myObject.name}} - {{myObject.address}}
             </span>
             <span class="exit-showing" (click)="exitShowingObject()" matTooltip="Nazad">        
                 <button mat-icon-button>      
                     <mat-icon>arrow_back</mat-icon>                            
                 </button>
             </span>
-    </div>  
-    
+    </div>         
     <div fxLayout="row" fxLayoutAlign="center center"class="mat-elevation-z8" 
                         style="padding: 5px;"  *ngIf="deleting">        
        
@@ -39,10 +40,10 @@
     <div fxLayout="row" fxLayoutAlign="space-around center"class="mat-elevation-z8" style="padding: 5px;"> 
         <div>
             <span class="mySpan" (click)="showGuests()" matTooltip="Prijavi/odjavi gosta">
-                Prijava/Odjava gostiju
                 <button mat-icon-button>      
                     <mat-icon>list</mat-icon>                            
                 </button>
+                Prijava/Odjava gostiju                
             </span>             
         </div>           
         
@@ -83,8 +84,8 @@
               
     </div>     
 
-    <div fxLayout="row" fxLayoutAlign="space-evenly center" style="padding: 10px;">       
-
+    <div fxLayout="row" fxLayoutAlign="space-evenly center" style="padding: 10px;"> 
+        
         <div fxLayout="column" fxLayoutAlign="space-evenly center">
             <p class="action-header" >Izmeni naziv</p>
             <span style="color:red; font-size:16px; text-align: center;" >{{nameError}}</span>
@@ -97,15 +98,32 @@
             <button mat-stroked-button color="primary" matTooltip="Sačuvaj naziv" 
                     (click)="updateObjectName()" [disabled]="isBlank(myObject.name)">
                 Sačuvaj naziv
-            </button>     
+            </button>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="space-evenly center">
+            <p class="action-header" >Izmeni adresu</p>
+            <span style="color:red; font-size:16px; text-align: center;" >{{addressError}}</span>
+            <span style="color:black; font-size:16px; text-align: center;">{{addressInfo}}</span>
             <br>
+            <mat-form-field class="example-full-width">
+                <mat-label>Adresa objekta</mat-label>
+                <input matInput name="address" [(ngModel)]="myObject.address" required>
+            </mat-form-field>
+            <button mat-stroked-button color="primary" matTooltip="Sačuvaj adresu" 
+                    (click)="updateObjectAddress()" [disabled]="isBlank(myObject.address)">
+                Sačuvaj adresu
+            </button>
+        </div>
+
+        <div fxLayout="column" fxLayoutAlign="space-evenly center">
             <p class="action-header" >Izmeni opis</p>
             <span style="color:red; font-size:16px; text-align: center;" >{{detailsError}}</span>
             <span style="color:black; font-size:16px; text-align: center;">{{detailsInfo}}</span>
             <br>
             <mat-form-field class="example-full-width">
                 <mat-label>Opis objekta</mat-label>
-                <textarea matInput name="details" placeholder="Unesite opis objekta">{{myObject.details}}</textarea>
+                <textarea matInput name="details" placeholder="Unesite opis objekta" [(ngModel)]="myObject.details"
+                >{{myObject.details}}</textarea>
             </mat-form-field>
             <button mat-stroked-button color="primary" matTooltip="Sačuvaj opis"
             (click)="updateObjectDetails()">Sačuvaj opis</button>

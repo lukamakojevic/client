@@ -14,89 +14,139 @@
 </div>
 <br>
 <!--Dodavanje novog-->
-<div>
-  <p style="font-size: 20px; text-align: center; font-weight: bold;">Dodavanje korisnika</p>
-  <div style="color:red; font-size:18px; text-align: center;" >{{newUserMessage}}</div>
-  <mat-toolbar  class="mat-elevation-z8" style="font-size: 14px;">
-    <span> 
-      <form class="example-form">
-          <mat-form-field class="example-full-width">
-            <mat-label>Naziv</mat-label>
-            <input matInput name="name" [(ngModel)]="newUser.name">
-          </mat-form-field>
-      </form>
-    </span> 
-    <span> 
-      <form class="example-form">
-          <mat-form-field class="example-full-width">
-            <mat-label>Korisničko ime</mat-label>
-            <input matInput name="username" [(ngModel)]="newUser.username">
-          </mat-form-field>
-      </form>
-    </span>
-    <span> 
-      <form class="example-form">
-          <mat-form-field class="example-full-width" >
-            <mat-label>Šifra</mat-label>
-            <input matInput name="password" [(ngModel)]="newUser.password">
-          </mat-form-field>
-      </form>
-    </span> 
-    <span> 
-      <form class="example-form">
-          <mat-form-field >
-              <mat-label>Tip korisnika</mat-label>
-              <mat-select [(value)]="newUser.type">
-                <mat-option *ngFor="let tip of tipoviKorisnika" [value]="tip.value">
-                  {{tip.viewValue}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-      </form>
-    </span>
-    <span > 
-      <form class="example-form">
-          <mat-form-field >
-              <mat-label>Vrsta korisnika</mat-label>
-              <mat-select [(value)]="newUser.kind">
-                <mat-option *ngFor="let vrsta of vrsteKorisnika" [value]="vrsta.value">
-                  {{vrsta.viewValue}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-      </form>
-    </span>
-    <span> 
-      <form class="example-form">
-          <mat-form-field>
-              <mat-label>Registrovan</mat-label>
-              <mat-select [(value)]="newUser.registeredFlag">
-                <mat-option *ngFor="let reg of tipoviRegistracije" [value]="reg.value">
-                  {{reg.viewValue}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-      </form>
-    </span>
-    <span> 
-      <form class="example-form">                    
-          <button mat-stroked-button color="primary" matTooltip="Dodaj korisnika"
-                (click)="addNewUser()">Dodaj</button>
-      </form>
-    </span>
-    <span> 
-      <form class="example-form">
-          <button mat-stroked-button color="warn" matTooltip="Poništi"
-          (click)="cancelNewUser()">Poništi</button>
-      </form>                
-    </span>
+<mat-toolbar  class="mat-elevation-z8" style="font-size: 14px; height: auto;">
+  <div fxLayout="column" fxLayoutAlign="space-around center">
 
-  </mat-toolbar>
-</div>
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <p style="font-size: 20px; text-align: center; font-weight: bold;">Dodavanje korisnika</p>
+      <div style="color:red; font-size:18px; text-align: center;" >{{newUserMessage}}</div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="center center">            
+      <span> 
+        <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Naziv</mat-label>
+              <input matInput name="name" [(ngModel)]="newUser.name">
+            </mat-form-field>
+        </form>
+      </span> 
+      <span> 
+        <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Korisničko ime</mat-label>
+              <input matInput name="username" [(ngModel)]="newUser.username">
+            </mat-form-field>
+        </form>
+      </span>
+      <span> 
+        <form class="example-form">
+            <mat-form-field class="example-full-width" >
+              <mat-label>Šifra</mat-label>
+              <input matInput name="password" [(ngModel)]="newUser.password">
+            </mat-form-field>
+        </form>
+      </span> 
+      <span> 
+        <form class="example-form">
+            <mat-form-field>
+                <mat-label>Tip korisnika</mat-label>
+                <mat-select [(value)]="newUser.type">
+                  <mat-option *ngFor="let tip of tipoviKorisnika" [value]="tip.value">
+                    {{tip.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+        </form>
+      </span>
+      <span > 
+        <form class="example-form">
+            <mat-form-field >
+                <mat-label>Vrsta korisnika</mat-label>
+                <mat-select [(value)]="newUser.kind">
+                  <mat-option *ngFor="let vrsta of vrsteKorisnika" [value]="vrsta.value">
+                    {{vrsta.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+        </form>
+      </span>
+      <span> 
+        <form class="example-form">
+            <mat-form-field class="example-full-width">
+              <mat-label>Adresa</mat-label>
+              <input matInput name="address" [(ngModel)]="newUser.address">
+            </mat-form-field>
+        </form>
+      </span>
+      <span> 
+        <form class="example-form">
+            <mat-form-field>
+                <mat-label>Registrovan</mat-label>
+                <mat-select [(value)]="newUser.registeredFlag">
+                  <mat-option *ngFor="let reg of tipoviRegistracije" [value]="reg.value">
+                    {{reg.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+        </form>
+      </span>
+    </div>
+    
+    <div fxLayout="row" fxLayoutAlign="center center">
+        <span> 
+          <form class="example-form">                    
+              <button mat-stroked-button color="primary" matTooltip="Dodaj korisnika"
+                    (click)="addNewUser()">Dodaj</button>
+          </form>
+        </span>
+        <span> 
+          <form class="example-form">
+              <button mat-stroked-button color="warn" matTooltip="Poništi"
+              (click)="cancelNewUser()">Poništi</button>
+          </form>                
+        </span>
+    </div>
+  </div>
+</mat-toolbar>
 <br>
 <!--Tabela-->
 <div>
     <p style="font-size: 20px; text-align: center; font-weight: bold;">Pregled korisnika</p>
+    <div fxLayout="row" fxLayoutAlign="center center" class="menuBarNoPadding">
+      <input #filter (keyup)="applyFilter($event)" matInput class="filterInput"
+          placeholder="&#xF002;  Pretraži korisnike..."
+          (blur)="clearFilter()"> 
+      <button mat-icon-button matTooltip="Poništi pretragu" *ngIf="filterActive && filter.value!=''"
+              (click)="clearFilter()">                  
+          <mat-icon>close</mat-icon>          
+      </button>        
+    </div>
+    
+    <div *ngIf="editModeUserId !=''" fxLayout="row" fxLayoutAlign="center center" 
+      class="mat-elevation-z8" style="background-color: white;">
+      <span> 
+          <form>                    
+              <button mat-stroked-button color="primary"style="font-size: 12px;" matTooltip="Sačuvaj"
+              (click)="save()" [disabled]="!checkData()">Sačuvaj</button>
+          </form>
+      </span>
+      <span> 
+          <form>
+              <button mat-stroked-button color="warn" style="font-size: 12px;" matTooltip="Otkaži"
+              (click)="cancel()">Otkaži</button>
+          </form>                
+      </span>
+      <span > 
+          <form>
+            <button mat-icon-button matTooltip="Izbriši korisnika" class="example-icon delete-icon"
+            (click)="deleteUser()">                  
+              <mat-icon>delete</mat-icon>          
+          </button>
+          </form>                
+      </span>
+    </div>
+
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" >          
         <!-- Naziv Column -->
         <ng-container matColumnDef="name">
@@ -191,6 +241,21 @@
                 </span> 
             </td>
         </ng-container>
+        <!-- Adresa ime Column -->
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Adresa korisnika</th>
+          <td mat-cell *matCellDef="let element">           
+                <span *ngIf="element._id != editModeUserId"> {{element.address}} </span>
+                <span *ngIf="element._id == editModeUserId"> 
+                    <form class="example-form">
+                        <mat-form-field class="example-full-width">
+                          <mat-label>Adresa korisnika</mat-label>
+                          <input matInput name="address" [(ngModel)]="editModeUser.address">
+                        </mat-form-field>
+                    </form>
+                </span> 
+          </td>
+        </ng-container>
     
         <!-- Registrovan Column -->
         <ng-container matColumnDef="registeredFlag">
@@ -214,52 +279,19 @@
         </ng-container>     
         
 
-      <!-- Sačuvaj Column -->
-      <ng-container matColumnDef="buttonsSave">
+      <!-- Uredi Column -->
+      <ng-container matColumnDef="buttonsEdit" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
         <td mat-cell *matCellDef="let element">  
-            <span *ngIf="element._id != editModeUserId"> 
+            <span *ngIf="editModeUserId ==''"> 
                 <form>                    
                     <button mat-icon-button matTooltip="Izmeni korisnika" class="example-icon delete-icon">                  
                         <mat-icon>edit</mat-icon>          
                     </button>
                 </form>
-            </span>           
-            <span *ngIf="element._id == editModeUserId"> 
-                <form>                    
-                    <button mat-stroked-button color="primary"style="font-size: 12px;" matTooltip="Sačuvaj"
-                    (click)="save()">Sačuvaj</button>
-                </form>
-            </span>
+            </span>             
         </td>
-      </ng-container> 
-
-        <!-- Otkaži Column -->
-        <ng-container matColumnDef="buttonsCancel">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>
-            <td mat-cell *matCellDef="let element">             
-                <span *ngIf="element._id == editModeUserId"> 
-                    <form>
-                        <button mat-stroked-button color="warn" style="font-size: 12px;" matTooltip="Otkaži"
-                        (click)="cancel()">Otkaži</button>
-                    </form>                
-                </span>
-            </td>
-        </ng-container>
-        <!-- Izbrisi Column -->
-        <ng-container matColumnDef="buttonsDelete"> 
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>  </th>           
-          <td mat-cell *matCellDef="let element">             
-              <span *ngIf="element._id == editModeUserId"> 
-                  <form>
-                    <button mat-icon-button matTooltip="Izbriši korisnika" class="example-icon delete-icon"
-                     (click)="deleteUser()">                  
-                      <mat-icon>delete</mat-icon>          
-                   </button>
-                  </form>                
-              </span>
-          </td>
-      </ng-container>
+      </ng-container>        
       
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr class="row" mat-row *matRowDef="let row; columns: displayedColumns;" (click)="edit(row)"></tr>

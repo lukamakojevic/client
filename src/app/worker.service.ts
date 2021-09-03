@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class WorkerService {
+export class WorkerService {  
   
   uri = 'http://localhost:4000';
 
@@ -36,6 +36,10 @@ export class WorkerService {
       "approvedById" : workerId
     }
     return this.http.post(`${this.uri}/worker/declineRequest`, data);
+  }
+
+  getAllUnpaiedTaxes() {
+    return this.http.post(`${this.uri}/worker/getAllUnpaiedTaxes`, null);
   }
   
 }

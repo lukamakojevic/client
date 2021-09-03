@@ -15,10 +15,14 @@ import { User } from '../models/user';
 export class AddcatererComponent implements OnInit { 
 
   vrsteObjekata: Vrsta[] = [
-    {value: 1, viewValue: 'Kafana'},
-    {value: 2, viewValue: 'Restoran'},
-    {value: 3, viewValue: 'Bar'},
-    {value: 4, viewValue: 'Kafić'}
+    {value: 1, viewValue: 'Apartman'},
+    {value: 2, viewValue: 'Hotel'},
+    {value: 3, viewValue: 'Stan'},
+    {value: 4, viewValue: 'Motel'},
+    {value: 5, viewValue: 'Kamp'} , 
+    {value: 6, viewValue: 'Kuća'} ,
+    {value: 7, viewValue: 'Soba'} ,
+    {value: 8, viewValue: 'Seosko domaćinstvo'}
   ];
 
   tipoviRegistracije: TipReg[] = [

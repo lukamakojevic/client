@@ -19,7 +19,8 @@ export class AdminService {
     return this.http.post(`${this.uri}/admin/getAllUsers`, null);
   } 
 
-  addNewUser(user: any) {
+  addNewUser(user: User) {
+    delete user._id;
     return this.http.post(`${this.uri}/admin/addNewUser`, user);
   }
 

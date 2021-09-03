@@ -1,0 +1,30 @@
+<div mat-dialog-content fxLayout="column" fxLayoutAlign="space-around center">
+  <img src="../../assets/cardsLogo.png" width="90%">
+  <p>Podržane kartice</p>
+  <p style="font-weight: bold; font-size: larger;">Unos informacija o bankarskoj kartici</p>
+  <mat-form-field appearance="fill">
+    <mat-label>Broj kartice</mat-label>
+    <input matInput type="number" [(ngModel)]="data.cardNumber" placeholder="Unesite broj kartice" name="cardNumber">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Vlasnik kartice</mat-label>
+    <input matInput [(ngModel)]="data.cardOwner" placeholder="Ime vlasnika kartice" name="cardOwner">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Rok važenja</mat-label>
+    <input matInput [(ngModel)]="data.billDate" placeholder="MM/GG" name="billDate" maxlength="5">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Bezbednosni kod</mat-label>
+    <input matInput type="password" [(ngModel)]="data.pin" maxlength="4"
+            placeholder="3-cifeni ili 4-cifreni broj" name="pin">
+  </mat-form-field>  
+</div>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-around center">
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" matTooltip="Plati taksu" cdkFocusInitial
+        [disabled]="!data.cardNumber||
+                    !data.cardOwner || data.cardOwner == '' ||
+                    !data.billDate|| data.billDate == '' ||
+                    !data.pin || data.pin == ''">Plati</button>  
+  <button mat-raised-button color="warn" (click)="onNoClick()" matTooltip="Izađi">Izađi</button>
+</div>
